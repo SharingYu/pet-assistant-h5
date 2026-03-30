@@ -3,7 +3,7 @@
  */
 
 const Pages = {
-  // 渲染首页
+  // ========== 首页 ==========
   renderHome() {
     const pets = Store.getState('pets');
     const reminders = Store.getState('reminders');
@@ -19,7 +19,7 @@ const Pages = {
           <div class="pets-container">
             ${pets.map(pet => renderPetCard(pet)).join('')}
             <div class="pet-card" onclick="App.showAddPetModal()" style="border: 2px dashed var(--border); background: transparent;">
-              <div class="pet-avatar" style="background: var(--bg);">➕</div>
+              <div class="pet-avatar" style="background: var(--bg); font-size: 28px;">➕</div>
               <div class="pet-name" style="color: var(--text-light); font-size: 14px;">添加宠物</div>
             </div>
           </div>
@@ -48,13 +48,13 @@ const Pages = {
             <span class="action-icon">🔬</span>
             <span class="action-name">AI看图诊断</span>
           </div>
-          <div class="action-card" onclick="App.showPetProfile(App.currentPetId)">
-            <span class="action-icon">📋</span>
-            <span class="action-name">健康记录</span>
-          </div>
           <div class="action-card" onclick="App.navigateTo('community')">
             <span class="action-icon">🌟</span>
             <span class="action-name">宠友圈</span>
+          </div>
+          <div class="action-card" onclick="App.showDiagnosisHistory()">
+            <span class="action-icon">📋</span>
+            <span class="action-name">诊断历史</span>
           </div>
           <div class="action-card" onclick="App.navigateTo('reminders')">
             <span class="action-icon">⏰</span>
@@ -96,10 +96,11 @@ const Pages = {
     `;
   },
   
-  // 渲染诊断页
+  // ========== 诊断页 ==========
   diagnosisState: {
     step: 1,
     selectedType: null,
+    selectedPetId: null,
     uploadedImage: null,
     analyzing: false,
     result: null,
@@ -108,21 +109,28 @@ const Pages = {
   
   renderDiagnosis() {
     const s = this.diagnosisState;
+    const pets = Store.getState('pets');
     
+    // 步骤条
     const stepHtml = `
       <div class="steps-bar">
         <div class="step-item ${s.step >= 1 ? 'active' : ''}">
           <div class="step-num">1</div>
-          <span class="step-text">选择类型</span>
+          <span class="step-text">选择宠物</span>
         </div>
         <div class="step-line ${s.step >= 2 ? 'active' : ''}"></div>
         <div class="step-item ${s.step >= 2 ? 'active' : ''}">
           <div class="step-num">2</div>
-          <span class="step-text">上传图片</span>
+          <span class="step-text">选择类型</span>
         </div>
         <div class="step-line ${s.step >= 3 ? 'active' : ''}"></div>
         <div class="step-item ${s.step >= 3 ? 'active' : ''}">
           <div class="step-num">3</div>
+          <span class="step-text">上传图片</span>
+        </div>
+        <div class="step-line ${s.step >= 4 ? 'active' : ''}"></div>
+        <div class="step-item ${s.step >= 4 ? 'active' : ''}">
+          <div class="step-num">4</div>
           <span class="step-text">查看结果</span>
         </div>
       </div>
@@ -130,20 +138,53 @@ const Pages = {
     
     let content = '';
     
+    // Step 1: 选择宠物
     if (s.step === 1) {
-      // 选择类型
       content = `
         <div class="section-header" style="padding-top: 16px;">
-          <h2>🐾 选择诊断类型</h2>
+          <h2>🐾 选择要诊断的宠物</h2>
+        </div>
+        <div style="padding: 0 16px;">
+          ${pets.length > 0
+            ? `<div class="type-grid" style="grid-template-columns: repeat(2, 1fr);">
+                ${pets.map(pet => {
+                  const emoji = API.petTypes.find(t => t.id === pet.type)?.emoji || '🐾';
+                  const isSelected = s.selectedPetId === pet.id;
+                  return `
+                    <div class="type-card ${isSelected ? 'selected' : ''}" data-pet-id="${pet.id}" onclick="Diagnosis.selectPet('${pet.id}')" style="padding: 16px;">
+                      <span style="font-size: 40px; display: block; margin-bottom: 8px;">${emoji}</span>
+                      <span class="type-name">${pet.name}</span>
+                      <span class="type-desc">${pet.breed || pet.type}</span>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+              ${s.selectedPetId ? `<div style="padding: 16px;"><button class="btn btn-primary btn-full" onclick="Diagnosis.confirmPet()">确认选择 "${pets.find(p => p.id === s.selectedPetId)?.name}"</button></div>` : ''}`
+            : `<div class="empty-state">
+                <span class="empty-icon">🐾</span>
+                <div class="empty-title">还没有宠物</div>
+                <button class="btn btn-primary" onclick="App.showAddPetModal()">添加宠物</button>
+              </div>`
+          }
+        </div>
+      `;
+    }
+    // Step 2: 选择类型
+    else if (s.step === 2) {
+      content = `
+        <div class="section-header" style="padding-top: 16px;">
+          <h2>🔍 选择诊断类型</h2>
         </div>
         <div class="type-grid">
           ${['skin', 'eye', 'stool', 'behavior', 'mouth', 'ear'].map(type => 
             renderDiagnosisTypeCard(type, s.selectedType === type)
           ).join('')}
         </div>
+        ${s.selectedType ? `<div style="padding: 16px;"><button class="btn btn-primary btn-full" onclick="Diagnosis.confirmType()">下一步</button></div>` : ''}
       `;
-    } else if (s.step === 2) {
-      // 上传图片
+    }
+    // Step 3: 上传图片
+    else if (s.step === 3) {
       const typeInfo = {
         skin: { icon: '🔴', name: '皮肤问题' },
         eye: { icon: '👁️', name: '眼睛异常' },
@@ -153,12 +194,12 @@ const Pages = {
         ear: { icon: '👂', name: '耳部问题' }
       };
       const info = typeInfo[s.selectedType];
+      const pet = pets.find(p => p.id === s.selectedPetId);
       
       if (s.analyzing) {
-        // 分析中
         content = `
           <div class="preview-section">
-            <img class="preview-image" src="${s.uploadedImage}" alt="预览">
+            ${s.uploadedImage ? `<img class="preview-image" src="${s.uploadedImage}" alt="预览">` : ''}
             <div class="analyzing-overlay">
               <div class="analyzing-spinner"></div>
               <div class="analyzing-text">AI 正在分析中...</div>
@@ -167,7 +208,6 @@ const Pages = {
           </div>
         `;
       } else if (s.uploadedImage) {
-        // 已上传，显示预览
         content = `
           <div class="preview-section">
             <img class="preview-image" src="${s.uploadedImage}" alt="预览">
@@ -178,33 +218,40 @@ const Pages = {
           </div>
         `;
       } else {
-        // 上传区域
         content = `
-          <div class="selected-type-bar">
-            <span>${info.icon} ${info.name}</span>
-            <span class="change-type-btn" onclick="Diagnosis.changeType()">重选</span>
+          <div style="padding: 16px; background: #f9f9f9; margin: 0 16px; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+              <span style="font-size: 24px;">🐾</span>
+              <span style="font-size: 14px; color: #666;">诊断对象：<strong>${pet?.name || ''}</strong></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 24px;">${info.icon}</span>
+              <span style="font-size: 14px; color: #666;">诊断类型：<strong>${info.name}</strong></span>
+              <span class="change-type-btn" onclick="Diagnosis.changeType()" style="margin-left: auto; color: #FF9500; font-size: 13px; cursor: pointer;">重选</span>
+            </div>
           </div>
-          <div class="upload-zone" id="uploadZone" style="margin-top: 24px;">
+          
+          <div class="upload-zone" id="uploadZone" style="margin: 24px 16px;">
             <span class="upload-icon">📷</span>
             <span class="upload-text">点击上传宠物图片</span>
             <span class="upload-hint">支持 JPG/PNG，建议图片清晰</span>
           </div>
-          <div style="padding: 16px 24px; background: var(--bg); margin: 0 16px; border-radius: 12px;">
+          
+          <div style="padding: 16px; margin: 0 16px; background: var(--bg); border-radius: 12px;">
             <div style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">📌 拍照建议：</div>
-            <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.8;">
-              ${API.getUploadTips(s.selectedType)}
-            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.8; white-space: pre-line;">${API.getUploadTips(s.selectedType)}</div>
           </div>
           <input type="file" id="imageInput" accept="image/*" style="display: none;">
         `;
       }
-    } else if (s.step === 3 && s.result) {
-      // 查看结果
+    }
+    // Step 4: 查看结果
+    else if (s.step === 4 && s.result) {
       const r = s.result;
       const severityClass = r.severity.class === 'danger' ? 'severity-danger' : r.severity.class === 'warning' ? 'severity-warning' : '';
       
       content = `
-        <div class="result-section">
+        <div class="result-section" style="padding: 0 16px;">
           <div class="result-card ${severityClass}">
             <div class="severity-header">
               <span style="font-size: 14px; font-weight: 500;">紧急程度</span>
@@ -225,14 +272,25 @@ const Pages = {
             `).join('')}
           </div>
           
+          ${r.homeCare && r.homeCare.length > 0 ? `
+            <div class="result-card" style="margin-top: 12px;">
+              <h4 style="font-size: 14px; margin-bottom: 12px;">🏠 居家护理建议</h4>
+              ${r.homeCare.map(item => `
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                  <span style="color: var(--success);">✓</span>
+                  <span>${item}</span>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+          
           <div class="result-card" style="margin-top: 12px;">
-            <h4 style="font-size: 14px; margin-bottom: 12px;">💡 AI 建议</h4>
+            <h4 style="font-size: 14px; margin-bottom: 12px;">💡 AI 分析建议</h4>
             <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">${r.aiAdvice}</p>
           </div>
           
           <div class="disclaimer">
-            <p>⚠️ 本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。</p>
-            <p>如有疑虑，请立即前往正规宠物医院就诊。</p>
+            <p>⚠️ ${r.disclaimer || '本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。如有疑虑，请立即前往正规宠物医院就诊。'}</p>
           </div>
           
           <div class="action-buttons">
@@ -256,7 +314,10 @@ const Pages = {
                         <div class="case-pet">${c.petName}</div>
                       </div>
                     </div>
-                    <span class="case-source ${c.from === '小红书' ? 'xhs' : ''}">${c.from}</span>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                      <span class="case-source ${c.from === '小红书' ? 'xhs' : ''}">${c.from}</span>
+                      ${c.solved ? '<span class="tag tag-green" style="font-size: 10px;">已解决</span>' : ''}
+                    </div>
                   </div>
                   <div class="case-content">${c.content}</div>
                   <div class="case-footer">
@@ -285,18 +346,16 @@ const Pages = {
     `;
   },
   
-  // 渲染社区页
+  // ========== 社区页 ==========
   renderCommunity() {
     const posts = Store.getState('posts');
     const activeTab = 'hot';
-    
-    const tabs = ['🔥 热门', '✨ 最新', '❤️ 关注'];
     
     return `
       <div class="page-content community-page">
         <div class="community-header">
           <div class="community-tabs">
-            ${tabs.map((tab, i) => `
+            ${['🔥 热门', '✨ 最新', '❤️ 关注'].map((tab, i) => `
               <span class="comm-tab ${i === 0 ? 'active' : ''}">${tab}</span>
             `).join('')}
           </div>
@@ -315,7 +374,7 @@ const Pages = {
     `;
   },
   
-  // 渲染提醒页
+  // ========== 提醒页 ==========
   renderReminders() {
     const reminders = Store.getState('reminders');
     const pets = Store.getState('pets');
@@ -328,7 +387,6 @@ const Pages = {
     const active = reminders.filter(r => !r.done);
     const completed = reminders.filter(r => r.done);
     
-    // 分组
     const todayReminders = active.filter(r => r.date === today);
     const tomorrowReminders = active.filter(r => r.date === tomorrow);
     const weekReminders = active.filter(r => r.date > tomorrow && r.date <= weekLater);
@@ -403,7 +461,7 @@ const Pages = {
     `;
   },
   
-  // 渲染宠物档案页
+  // ========== 宠物档案页 ==========
   renderPetProfile(petId) {
     const pets = Store.getState('pets');
     const pet = pets.find(p => p.id === petId);
@@ -417,9 +475,11 @@ const Pages = {
       ? `<img src="${pet.avatar}" alt="${pet.name}">` 
       : `<span style="font-size: 48px;">${emoji}</span>`;
     
-    const age = pet.birthday ? Pages.calculateAge(pet.birthday) : '未知';
-    
     const genderText = pet.gender === 'male' ? '♂ 公' : pet.gender === 'female' ? '♀ 母' : '-';
+    const age = Store.getPetAge(pet.birthday);
+    
+    const vaccineRecords = pet.vaccineRecords || [];
+    const dewormingRecords = pet.dewormingRecords || [];
     
     return `
       <div class="page-content pet-profile-page">
@@ -433,7 +493,7 @@ const Pages = {
               <span class="profile-tag">${age}</span>
             </div>
           </div>
-          <button class="profile-edit-btn" onclick="App.showEditPetModal('${pet.id}')">✏️ 编辑</button>
+          <button class="profile-edit-btn" onclick="App.showEditPetModal('${pet.id}')">✏️</button>
         </div>
         
         <div class="info-grid" style="padding: 16px;">
@@ -466,14 +526,14 @@ const Pages = {
         <div class="health-records-section">
           <div class="section-header" style="padding-left: 0;">
             <h3>💉 疫苗记录</h3>
-            <span class="section-more" onclick="App.showAddRecordModal('${pet.id}', 'vaccine')">+ 添加</span>
+            <span class="section-more" onclick="App.showAddHealthRecordModal('${pet.id}', 'vaccineRecords')">+ 添加</span>
           </div>
-          ${pet.vaccineRecords && pet.vaccineRecords.length > 0
-            ? pet.vaccineRecords.map(v => `
+          ${vaccineRecords.length > 0
+            ? vaccineRecords.map(v => `
                 <div class="record-item">
                   <div class="record-info">
                     <h4>${v.type}</h4>
-                    <p>${v.date} · ${v.hospital || ''}</p>
+                    <p>${v.date} · ${v.medicine || v.hospital || ''}</p>
                   </div>
                   <span class="tag ${v.done ? 'tag-green' : 'tag-yellow'}">${v.done ? '已完成' : '待接种'}</span>
                 </div>
@@ -483,10 +543,10 @@ const Pages = {
           
           <div class="section-header" style="padding-left: 0; margin-top: 16px;">
             <h3>💊 驱虫记录</h3>
-            <span class="section-more" onclick="App.showAddRecordModal('${pet.id}', 'deworm')">+ 添加</span>
+            <span class="section-more" onclick="App.showAddHealthRecordModal('${pet.id}', 'dewormingRecords')">+ 添加</span>
           </div>
-          ${pet.dewormingRecords && pet.dewormingRecords.length > 0
-            ? pet.dewormingRecords.map(d => `
+          ${dewormingRecords.length > 0
+            ? dewormingRecords.map(d => `
                 <div class="record-item">
                   <div class="record-info">
                     <h4>${d.type}</h4>
@@ -504,19 +564,5 @@ const Pages = {
         </div>
       </div>
     `;
-  },
-  
-  calculateAge(birthday) {
-    if (!birthday) return '未知';
-    const birth = new Date(birthday);
-    const now = new Date();
-    const years = now.getFullYear() - birth.getFullYear();
-    const months = now.getMonth() - birth.getMonth();
-    if (years > 0) {
-      return `${years}岁${months > 0 ? months + '月' : ''}`;
-    } else {
-      const totalMonths = (now.getFullYear() - birth.getFullYear()) * 12 + months;
-      return `${Math.max(1, totalMonths)}月`;
-    }
   }
 };

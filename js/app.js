@@ -7,25 +7,14 @@ const App = {
   currentPetId: null,
   
   init() {
-    // 初始化 TabBar
     TabBar.init();
-    
-    // 订阅 store 变化
     Store.subscribe(() => this.onStateChange());
-    
-    // 绑定导航
     this.bindNavigation();
-    
-    // 渲染首页
     this.navigateTo('home');
-    
-    // 更新 badge
     TabBar.updateBadge();
-    
     console.log('App initialized');
   },
   
-  // 导航到页面
   navigateTo(tab, data = null) {
     this.currentTab = tab;
     TabBar.setActive(tab);
@@ -57,58 +46,24 @@ const App = {
     }
   },
   
-  // 状态变化回调
   onStateChange() {
-    // 根据当前状态重新渲染
-    if (this.currentTab === 'home') {
-      this.navigateTo('home');
-    } else if (this.currentTab === 'reminders') {
-      this.navigateTo('reminders');
-    } else if (this.currentTab === 'community') {
-      this.navigateTo('community');
-    }
-    
-    // 更新 badge
+    if (this.currentTab === 'home') this.navigateTo('home');
+    else if (this.currentTab === 'reminders') this.navigateTo('reminders');
+    else if (this.currentTab === 'community') this.navigateTo('community');
     TabBar.updateBadge();
   },
   
-  // 绑定导航事件
-  bindNavigation() {
-    // 导航通过 TabBar 的点击事件处理
-  },
+  bindNavigation() {},
   
-  // 绑定首页事件
   bindHomeEvents() {
-    // 宠物卡片点击
     document.querySelectorAll('.pet-card[data-pet-id]').forEach(card => {
       card.addEventListener('click', () => {
-        const petId = card.dataset.petId;
-        this.showPetProfile(petId);
+        this.navigateTo('pet-profile', card.dataset.petId);
       });
     });
   },
   
-  // 显示宠物档案
-  showPetProfile(petId) {
-    this.navigateTo('pet-profile', petId);
-  },
-  
-  // 绑定诊断页事件
   bindDiagnosisEvents() {
-    const s = Pages.diagnosisState;
-    
-    // 类型选择
-    document.querySelectorAll('.type-card[data-type]').forEach(card => {
-      card.addEventListener('click', () => {
-        if (s.step === 1) {
-          s.selectedType = card.dataset.type;
-          s.step = 2;
-          this.navigateTo('diagnosis');
-        }
-      });
-    });
-    
-    // 上传区域
     const uploadZone = document.getElementById('uploadZone');
     const imageInput = document.getElementById('imageInput');
     
@@ -118,36 +73,24 @@ const App = {
     }
   },
   
-  // 处理图片上传
-  async handleImageUpload(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    const s = Pages.diagnosisState;
-    const result = await API.uploadImage(file);
-    
-    if (result.success) {
-      s.uploadedImage = result.data.url;
-      this.navigateTo('diagnosis');
-    } else {
-      Toast.error('上传失败');
-    }
-  },
-  
-  // 绑定社区事件
   bindCommunityEvents() {
-    // 点赞
     document.querySelectorAll('[data-action="like"]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const card = btn.closest('.post-card');
-        const postId = card.dataset.id;
-        Store.toggleLike(postId);
+        Store.toggleLike(card.dataset.id);
+      });
+    });
+    
+    document.querySelectorAll('[data-action="comment"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.post-card');
+        this.showCommentModal(card.dataset.id);
       });
     });
   },
   
-  // 绑定提醒事件
   bindReminderEvents() {
     document.querySelectorAll('.reminder-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -167,18 +110,14 @@ const App = {
     });
   },
   
-  // 绑定宠物档案事件
-  bindPetProfileEvents() {
-    // 返回按钮等
-  },
+  bindPetProfileEvents() {},
   
-  // 显示添加宠物弹窗
+  // ========== 宠物 ==========
   showAddPetModal() {
     Modal.show(renderAddPetForm());
     this.bindPetForm();
   },
   
-  // 显示编辑宠物弹窗
   showEditPetModal(petId) {
     const pet = Store.getState('pets').find(p => p.id === petId);
     if (pet) {
@@ -187,14 +126,12 @@ const App = {
     }
   },
   
-  // 绑定宠物表单
   bindPetForm(existingId = null) {
     const form = document.getElementById('petForm');
     if (!form) return;
     
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const formData = new FormData(form);
       const petData = {
         name: formData.get('name'),
@@ -214,16 +151,52 @@ const App = {
       if (existingId) {
         Store.updatePet(existingId, petData);
         Toast.success('保存成功');
+        Modal.hide();
+        this.navigateTo('pet-profile', existingId);
       } else {
-        Store.addPet(petData);
+        const newPet = Store.addPet(petData);
         Toast.success('添加成功');
+        Modal.hide();
+        this.navigateTo('home');
       }
-      
-      Modal.hide();
     });
   },
   
-  // 显示添加提醒弹窗
+  deletePet(petId) {
+    if (confirm('确定要删除这个宠物吗？')) {
+      Store.deletePet(petId);
+      Modal.hide();
+      Toast.success('已删除');
+      this.navigateTo('home');
+    }
+  },
+  
+  // ========== 健康记录 ==========
+  showAddHealthRecordModal(petId, recordType) {
+    const formType = recordType === 'vaccineRecords' ? 'vaccine' : 'deworm';
+    Modal.show(renderAddHealthRecordForm(petId, formType));
+    
+    const form = document.getElementById('recordForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const record = {
+        type: formData.get('type'),
+        date: formData.get('date'),
+        nextDate: formData.get('nextDate') || '',
+        hospital: formData.get('hospital') || '',
+        medicine: formData.get('medicine') || '',
+        done: form.querySelector('[name="done"]').checked
+      };
+      
+      Store.addHealthRecord(petId, recordType, record);
+      Toast.success('记录已添加');
+      Modal.hide();
+      this.navigateTo('pet-profile', petId);
+    });
+  },
+  
+  // ========== 提醒 ==========
   showAddReminderModal() {
     const pets = Store.getState('pets');
     
@@ -250,7 +223,7 @@ const App = {
         <form id="reminderForm">
           <div class="form-group">
             <label class="form-label">选择宠物</label>
-            <select class="form-input" name="petId" style="background: var(--bg); border: 2px solid var(--border);">
+            <select class="form-input" name="petId" style="background: #f5f5f5; border: 2px solid #e0e0e0;">
               ${petOptions}
             </select>
           </div>
@@ -260,17 +233,16 @@ const App = {
             <div id="typeGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0;">
               ${typeOptions}
             </div>
-            <input type="hidden" name="type" value="vaccine">
           </div>
           
           <div class="form-group">
             <label class="form-label">提醒事项</label>
-            <input type="text" class="form-input" name="title" placeholder="如：猫三联疫苗（第三针）" required>
+            <input type="text" class="form-input" name="title" placeholder="如：猫三联疫苗（第三针）" required style="background: #f5f5f5; border: 2px solid #e0e0e0;">
           </div>
           
           <div class="form-group">
             <label class="form-label">提醒日期</label>
-            <input type="date" class="form-input" name="date" required>
+            <input type="date" class="form-input" name="date" required style="background: #f5f5f5; border: 2px solid #e0e0e0;">
           </div>
           
           <button type="submit" class="btn btn-primary btn-full" style="margin-top: 16px;">保存提醒</button>
@@ -283,31 +255,27 @@ const App = {
       card.addEventListener('click', () => {
         document.querySelectorAll('#typeGrid .type-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
-        document.querySelector('[name="type"]').value = card.dataset.type;
       });
     });
-    
-    // 第一个默认选中
     document.querySelector('#typeGrid .type-card').classList.add('selected');
     
-    // 绑定表单提交
     const form = document.getElementById('reminderForm');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const formData = new FormData(form);
+      const selectedType = document.querySelector('#typeGrid .type-card.selected');
       const pet = pets.find(p => p.id === formData.get('petId'));
-      const type = API.reminderTypes.find(t => t.id === formData.get('type'));
+      const type = API.reminderTypes.find(t => t.id === selectedType?.dataset.type) || API.reminderTypes[0];
       
       const reminder = {
         petId: formData.get('petId'),
         petName: pet?.name || '',
-        type: formData.get('type'),
+        type: selectedType?.dataset.type || 'other',
         title: formData.get('title'),
         date: formData.get('date'),
-        icon: type?.icon || '📌',
-        color: type?.color || '#FF9500',
-        reminderTypeName: type?.name || '提醒'
+        icon: type.icon,
+        color: type.color,
+        reminderTypeName: type.name
       };
       
       Store.addReminder(reminder);
@@ -316,7 +284,7 @@ const App = {
     });
   },
   
-  // 显示新帖子弹窗
+  // ========== 社区 ==========
   showNewPostModal() {
     const pets = Store.getState('pets');
     
@@ -327,7 +295,7 @@ const App = {
     }
     
     const petOptions = pets.map((p, i) => `<option value="${p.id}">${p.name}</option>`).join('');
-    const topicOptions = API.topics.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+    const topicOptions = API.topics.map(t => `<option value="${t.name}">${t.icon} ${t.name}</option>`).join('');
     
     Modal.show(`
       <div class="modal-header">
@@ -338,19 +306,19 @@ const App = {
         <form id="postForm">
           <div class="form-group">
             <label class="form-label">以哪个宠物身份发帖</label>
-            <select class="form-input" name="petId" style="background: var(--bg); border: 2px solid var(--border);">
+            <select class="form-input" name="petId" style="background: #f5f5f5; border: 2px solid #e0e0e0;">
               ${petOptions}
             </select>
           </div>
           
           <div class="form-group">
             <label class="form-label">内容</label>
-            <textarea class="form-input" name="content" rows="4" placeholder="分享你家毛孩子的日常..." required style="resize: none;"></textarea>
+            <textarea class="form-input" name="content" rows="4" placeholder="分享你家毛孩子的日常..." required style="resize: none; background: #f5f5f5; border: 2px solid #e0e0e0;"></textarea>
           </div>
           
           <div class="form-group">
             <label class="form-label">话题标签</label>
-            <select class="form-input" name="topic" style="background: var(--bg); border: 2px solid var(--border);">
+            <select class="form-input" name="topic" style="background: #f5f5f5; border: 2px solid #e0e0e0;">
               ${topicOptions}
             </select>
           </div>
@@ -363,7 +331,6 @@ const App = {
     const form = document.getElementById('postForm');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const formData = new FormData(form);
       const pet = pets.find(p => p.id === formData.get('petId'));
       
@@ -382,20 +349,90 @@ const App = {
       Toast.success('发布成功');
       Modal.hide();
     });
+  },
+  
+  showCommentModal(postId) {
+    Modal.show(renderCommentPanel(postId));
+  },
+  
+  submitComment(postId) {
+    const input = document.getElementById('commentInput');
+    const content = input.value.trim();
+    if (!content) return;
+    
+    const pets = Store.getState('pets');
+    const pet = pets[0];
+    
+    Store.addComment(postId, content, pet?.name || '铲屎官', pet?.type || 'cat');
+    input.value = '';
+    Toast.success('评论成功');
+    
+    // 刷新评论区
+    Modal.show(renderCommentPanel(postId));
+  },
+  
+  // ========== 诊断历史 ==========
+  showDiagnosisHistory() {
+    const container = document.getElementById('pagesContainer');
+    container.innerHTML = renderDiagnosisHistory();
+  },
+  
+  // ========== 图片上传 ==========
+  handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // 检查文件类型
+    if (!file.type.startsWith('image/')) {
+      Toast.error('请上传图片文件');
+      return;
+    }
+    
+    // 检查文件大小 (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      Toast.error('图片大小不能超过10MB');
+      return;
+    }
+    
+    API.uploadImage(file).then(result => {
+      if (result.success) {
+        Diagnosis.setImage(result.data.url);
+      } else {
+        Toast.error('上传失败');
+      }
+    });
   }
 };
 
-// 诊断相关方法
+// ========== Diagnosis Controller ==========
 const Diagnosis = {
-  reset() {
-    Pages.diagnosisState = {
-      step: 1,
-      selectedType: null,
-      uploadedImage: null,
-      analyzing: false,
-      result: null,
-      similarCases: []
-    };
+  selectPet(petId) {
+    Pages.diagnosisState.selectedPetId = petId;
+    App.navigateTo('diagnosis');
+  },
+  
+  confirmPet() {
+    if (Pages.diagnosisState.selectedPetId) {
+      Pages.diagnosisState.step = 2;
+      App.navigateTo('diagnosis');
+    }
+  },
+  
+  confirmType() {
+    if (Pages.diagnosisState.selectedType) {
+      Pages.diagnosisState.step = 3;
+      App.navigateTo('diagnosis');
+    }
+  },
+  
+  changeType() {
+    Pages.diagnosisState.step = 2;
+    Pages.diagnosisState.selectedType = null;
+    App.navigateTo('diagnosis');
+  },
+  
+  setImage(imageUrl) {
+    Pages.diagnosisState.uploadedImage = imageUrl;
     App.navigateTo('diagnosis');
   },
   
@@ -404,9 +441,16 @@ const Diagnosis = {
     App.navigateTo('diagnosis');
   },
   
-  changeType() {
-    Pages.diagnosisState.step = 1;
-    Pages.diagnosisState.selectedType = null;
+  reset() {
+    Pages.diagnosisState = {
+      step: 1,
+      selectedType: null,
+      selectedPetId: null,
+      uploadedImage: null,
+      analyzing: false,
+      result: null,
+      similarCases: []
+    };
     App.navigateTo('diagnosis');
   },
   
@@ -415,14 +459,11 @@ const Diagnosis = {
     s.analyzing = true;
     App.navigateTo('diagnosis');
     
-    // 调用 AI 诊断
     const result = await API.diagnose(s.selectedType, s.uploadedImage);
     
     if (result.success) {
       s.result = result.data;
-      s.step = 3;
-      
-      // 获取相似案例
+      s.step = 4;
       s.similarCases = await API.getSimilarCases(s.selectedType);
     } else {
       Toast.error('诊断失败，请重试');
@@ -441,5 +482,5 @@ const Diagnosis = {
   }
 };
 
-// 初始化 App
+// 初始化
 document.addEventListener('DOMContentLoaded', () => App.init());

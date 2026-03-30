@@ -11,8 +11,13 @@ const Store = {
     reminders: [],
     posts: [],
     diagnosisHistory: [],
+    comments: [],  // 评论区
     loading: false,
-    user: null
+    user: null,
+    settings: {
+      notifications: true,
+      theme: 'light'
+    }
   },
   
   // 订阅者
@@ -25,6 +30,8 @@ const Store = {
     this.state.reminders = this.load('reminders') || [];
     this.state.posts = this.load('posts') || [];
     this.state.diagnosisHistory = this.load('diagnosisHistory') || [];
+    this.state.comments = this.load('comments') || [];
+    this.state.settings = this.load('settings') || this.state.settings;
     
     // 如果没有数据，初始化示例数据
     if (this.state.pets.length === 0) {
@@ -54,34 +61,28 @@ const Store = {
         dewormingRecords: [
           { id: 'd1', type: '体内驱虫', date: '2026-01-01', nextDate: '2026-07-01', done: true, medicine: '拜耳内虫逃' }
         ]
+      },
+      {
+        id: 'pet_002',
+        name: '豆豆',
+        type: 'dog',
+        avatar: '',
+        breed: '柴犬',
+        birthday: '2021-06-20',
+        gender: 'male',
+        weight: 12.3,
+        color: '黄白色',
+        sterilization: false,
+        vaccineRecords: [],
+        dewormingRecords: []
       }
     ];
     
     this.state.reminders = [
-      {
-        id: 'r1',
-        petId: 'pet_001',
-        petName: '奶茶',
-        type: 'vaccine',
-        title: '猫三联疫苗（加强针）',
-        date: '2027-03-15',
-        done: false,
-        icon: '💉',
-        color: '#52C41A',
-        reminderTypeName: '疫苗'
-      },
-      {
-        id: 'r2',
-        petId: 'pet_001',
-        petName: '奶茶',
-        type: 'deworm',
-        title: '体内驱虫',
-        date: '2026-07-01',
-        done: false,
-        icon: '💊',
-        color: '#722ED1',
-        reminderTypeName: '驱虫'
-      }
+      { id: 'r1', petId: 'pet_001', petName: '奶茶', type: 'vaccine', title: '猫三联疫苗（加强针）', date: '2027-03-15', done: false, icon: '💉', color: '#52C41A', reminderTypeName: '疫苗' },
+      { id: 'r2', petId: 'pet_001', petName: '奶茶', type: 'deworm', title: '体内驱虫', date: '2026-07-01', done: false, icon: '💊', color: '#722ED1', reminderTypeName: '驱虫' },
+      { id: 'r3', petId: 'pet_002', petName: '豆豆', type: 'vaccine', title: '狂犬疫苗', date: '2026-04-10', done: false, icon: '💉', color: '#52C41A', reminderTypeName: '疫苗' },
+      { id: 'r4', petId: 'pet_002', petName: '豆豆', type: 'bath', title: '洗澡美容', date: '2026-04-05', done: false, icon: '🛁', color: '#13C2C2', reminderTypeName: '洗澡' }
     ];
     
     this.state.posts = [
@@ -91,7 +92,7 @@ const Store = {
         content: '今天带橘子去打了疫苗，回来就趴着不动了，心疼😢 有什么办法能让主子舒服一点吗？',
         images: [],
         likes: 234,
-        comments: 45,
+        comments: 12,
         isLiked: false,
         topic: '#养宠日常#',
         time: '2小时前',
@@ -103,7 +104,7 @@ const Store = {
         content: '奶茶最近学会了开门...我应该高兴还是害怕？每次出门都要担心它跑出去#猫咪迷惑行为#',
         images: [],
         likes: 567,
-        comments: 89,
+        comments: 45,
         isLiked: true,
         topic: '#猫咪迷惑行为#',
         time: '4小时前',
@@ -115,24 +116,43 @@ const Store = {
         content: '分享一下我家狗皮肤病治疗经验：维克药浴 + 口服药，两周基本痊愈。关键是坚持，不要断药！',
         images: [],
         likes: 189,
-        comments: 56,
+        comments: 23,
         isLiked: false,
         topic: '#宠物健康#',
         time: '6小时前',
         aiReply: '汪汪！感谢分享！本狗子记住了这个经验汪~ 🐶'
+      },
+      {
+        id: 'post_004',
+        author: { name: '铲屎官阿华', petName: '年糕', petType: 'cat' },
+        content: '年糕终于驱虫完成了！这次乖乖吃药没有吐出来，进步超大🎉 #猫咪成长记录#',
+        images: [],
+        likes: 345,
+        comments: 34,
+        isLiked: false,
+        topic: '#猫咪成长记录#',
+        time: '昨天',
+        aiReply: '喵~年糕真棒！本喵小时候驱虫也很乖的~继续保持喵~ ✨'
       }
     ];
+    
+    this.state.comments = [
+      { id: 'c1', postId: 'post_001', author: '豆豆妈', petName: '豆豆', petType: 'dog', content: '我家狗子打完疫苗也这样，别担心2-3天就好了', time: '1小时前' },
+      { id: 'c2', postId: 'post_001', author: '年糕妈', petName: '年糕', petType: 'cat', content: '可以喂点益生菌，我家猫咪用的效果不错', time: '30分钟前' }
+    ];
+    
+    this.state.diagnosisHistory = [];
     
     // 保存到 localStorage
     this.save('pets', this.state.pets);
     this.save('reminders', this.state.reminders);
     this.save('posts', this.state.posts);
+    this.save('comments', this.state.comments);
   },
   
   // 订阅状态变化
   subscribe(callback) {
     this.subscribers.push(callback);
-    // 返回取消订阅函数
     return () => {
       this.subscribers = this.subscribers.filter(cb => cb !== callback);
     };
@@ -146,7 +166,6 @@ const Store = {
   // 设置状态
   setState(key, value) {
     if (typeof key === 'object') {
-      // 批量更新
       Object.assign(this.state, key);
     } else {
       this.state[key] = value;
@@ -178,9 +197,14 @@ const Store = {
     }
   },
   
-  // 数据操作方法
+  // ========== 宠物操作 ==========
   addPet(pet) {
-    const newPet = { ...pet, id: `pet_${Date.now()}` };
+    const newPet = { 
+      ...pet, 
+      id: `pet_${Date.now()}`,
+      vaccineRecords: pet.vaccineRecords || [],
+      dewormingRecords: pet.dewormingRecords || []
+    };
     this.state.pets.push(newPet);
     this.save('pets', this.state.pets);
     this.notify();
@@ -202,6 +226,29 @@ const Store = {
     this.notify();
   },
   
+  addHealthRecord(petId, recordType, record) {
+    const pet = this.state.pets.find(p => p.id === petId);
+    if (pet) {
+      const newRecord = { ...record, id: `record_${Date.now()}` };
+      if (!pet[recordType]) pet[recordType] = [];
+      pet[recordType].push(newRecord);
+      this.save('pets', this.state.pets);
+      this.notify();
+      return newRecord;
+    }
+    return null;
+  },
+  
+  deleteHealthRecord(petId, recordType, recordId) {
+    const pet = this.state.pets.find(p => p.id === petId);
+    if (pet && pet[recordType]) {
+      pet[recordType] = pet[recordType].filter(r => r.id !== recordId);
+      this.save('pets', this.state.pets);
+      this.notify();
+    }
+  },
+  
+  // ========== 提醒操作 ==========
   addReminder(reminder) {
     const newReminder = { ...reminder, id: `r_${Date.now()}`, done: false };
     this.state.reminders.push(newReminder);
@@ -225,6 +272,7 @@ const Store = {
     this.notify();
   },
   
+  // ========== 社区操作 ==========
   addPost(post) {
     const newPost = { 
       ...post, 
@@ -251,11 +299,39 @@ const Store = {
     }
   },
   
+  addComment(postId, content, petName, petType) {
+    const newComment = {
+      id: `c_${Date.now()}`,
+      postId,
+      author: `${petName}家长`,
+      petName,
+      petType,
+      content,
+      time: '刚刚'
+    };
+    this.state.comments.push(newComment);
+    
+    // 更新帖子评论数
+    const post = this.state.posts.find(p => p.id === postId);
+    if (post) post.comments++;
+    
+    this.save('comments', this.state.comments);
+    this.save('posts', this.state.posts);
+    this.notify();
+    return newComment;
+  },
+  
+  getPostComments(postId) {
+    return this.state.comments.filter(c => c.postId === postId);
+  },
+  
+  // ========== 诊断操作 ==========
   saveDiagnosis(diagnosis) {
     const newDiagnosis = { 
       ...diagnosis, 
       id: `diag_${Date.now()}`,
-      date: new Date().toLocaleDateString('zh-CN')
+      date: new Date().toLocaleDateString('zh-CN'),
+      time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
     };
     this.state.diagnosisHistory.unshift(newDiagnosis);
     this.save('diagnosisHistory', this.state.diagnosisHistory);
@@ -263,20 +339,81 @@ const Store = {
     return newDiagnosis;
   },
   
-  // 生成 AI 宠物回复
+  deleteDiagnosis(id) {
+    this.state.diagnosisHistory = this.state.diagnosisHistory.filter(d => d.id !== id);
+    this.save('diagnosisHistory', this.state.diagnosisHistory);
+    this.notify();
+  },
+  
+  // ========== 设置操作 ==========
+  updateSettings(updates) {
+    this.state.settings = { ...this.state.settings, ...updates };
+    this.save('settings', this.state.settings);
+    this.notify();
+  },
+  
+  // ========== 工具方法 ==========
   generateAIPetReply(petType, petName) {
     const replies = {
-      cat: ['喵~感谢分享喵~ 🐱', '喵呜，这个好有用！', '本喵记住了~谢谢~'],
-      dog: ['汪汪！太棒了汪！🐕', '谢谢分享！汪~', '本狗子觉得这个很棒！'],
-      default: ['路过~觉得这个很棒！🌟', '感谢分享！', '收藏了~']
+      cat: [
+        '喵~感谢分享喵~ 🐱',
+        '喵呜，这个好有用！',
+        '本喵记住了~谢谢~',
+        '喵~今天的阳光真舒服呢~ ☀️',
+        '铲屎官你好呀喵~ 🐾'
+      ],
+      dog: [
+        '汪汪！太棒了汪！🐕',
+        '谢谢分享！汪~',
+        '本狗子觉得这个很棒！',
+        '汪！今天心情好好汪~ 🦴',
+        '主人好！本汪来啦~ 🐶'
+      ],
+      rabbit: [
+        '咕咕~这个好有趣~ 🐰',
+        '兔兔觉得很不错呢~',
+        '谢谢分享咕~ 🌿'
+      ],
+      default: [
+        '路过~觉得这个很棒！🌟',
+        '感谢分享！',
+        '收藏了~ 🐾'
+      ]
     };
     const pool = replies[petType] || replies.default;
     return pool[Math.floor(Math.random() * pool.length)];
   },
   
-  // 获取未完成提醒数
   getPendingRemindersCount() {
     return this.state.reminders.filter(r => !r.done).length;
+  },
+  
+  // 获取宠物年龄
+  getPetAge(birthday) {
+    if (!birthday) return '未知';
+    const birth = new Date(birthday);
+    const now = new Date();
+    const years = now.getFullYear() - birth.getFullYear();
+    const months = now.getMonth() - birth.getMonth();
+    if (years > 0) {
+      return `${years}岁${months > 0 ? months + '月' : ''}`;
+    } else {
+      const totalMonths = (now.getFullYear() - birth.getFullYear()) * 12 + months;
+      return `${Math.max(1, totalMonths)}月`;
+    }
+  },
+  
+  // 格式化日期
+  formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diff = now - date;
+    
+    if (diff < 60000) return '刚刚';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
+    if (diff < 604800000) return `${Math.floor(diff / 86400000)}天前`;
+    return date.toLocaleDateString('zh-CN');
   }
 };
 
