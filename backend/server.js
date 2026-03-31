@@ -8,6 +8,8 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { execSync } = require('child_process');
 
 // ============ 配置 ============
@@ -263,40 +265,39 @@ const DB = {
 
 // ============ 工具函数 ============
 
-// JWT 简单实现
-const JWT_SECRET = 'pet_assistant_secret_2024';
-const jwt = {
-  sign(data, expiresIn = '30d') {
-    const payload = { ...data, exp: Date.now() + 30 * 24 * 60 * 60 * 1000 };
-    return Buffer.from(JSON.stringify(payload)).toString('base64');
-  },
-  verify(token) {
-    try {
-      const payload = JSON.parse(Buffer.from(token, 'base64').toString());
-      if (payload.exp < Date.now()) return null;
-      return payload;
-    } catch { return null; }
-  }
-};
+// JWT 配置
+const JWT_SECRET = process.env.JWT_SECRET || 'pet_assistant_secret_2024_prod';
+const JWT_EXPIRES_IN = '30d';
 
-// 密码哈希
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(password + JWT_SECRET).digest('hex');
+// 密码哈希（bcrypt）
+const SALT_ROUNDS = 10;
+
+async function hashPassword(password) {
+  return bcrypt.hash(password, SALT_ROUNDS);
 }
 
-// 验证密码
-function verifyPassword(password, hash) {
-  return hashPassword(password) === hash;
+async function verifyPassword(password, hash) {
+  return bcrypt.compare(password, hash);
 }
 
-// 认证中间件
+// 认证中间件（同步版本，用于路由参数解析）
 function auth(req) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return null;
   }
   const token = authHeader.split(' ')[1];
-  return jwt.verify(token);
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    return decoded;
+  } catch {
+    return null;
+  }
+}
+
+// 同步签发token辅助
+function signToken(payload) {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 }
 
 // CORS 头
@@ -316,7 +317,7 @@ function json(res, data, status = 200) {
 
 const routes = {
   // 认证
-  'POST /api/auth/register': (req, res, _, body) => {
+  'POST /api/auth/register': async (req, res, _, body) => {
     const { username, password, nickname } = body || {};
     if (!username || !password) {
       return json(res, { success: false, message: '用户名和密码不能为空' }, 400);
@@ -324,22 +325,23 @@ const routes = {
     if (DB.users.findByUsername(username)) {
       return json(res, { success: false, message: '用户名已存在' }, 400);
     }
+    const hashed = await hashPassword(password);
     const user = DB.users.create({
       username, 
-      password: hashPassword(password), 
+      password: hashed, 
       nickname: nickname || username 
     });
-    const token = jwt.sign({ userId: user.id, username: user.username });
+    const token = signToken({ userId: user.id, username: user.username });
     json(res, { success: true, data: { token, user: { id: user.id, username: user.username, nickname: user.nickname } } });
   },
   
-  'POST /api/auth/login': (req, res, _, body) => {
+  'POST /api/auth/login': async (req, res, _, body) => {
     const { username, password } = body || {};
     const user = DB.users.findByUsername(username);
-    if (!user || !verifyPassword(password, user.password)) {
+    if (!user || !(await verifyPassword(password, user.password))) {
       return json(res, { success: false, message: '用户名或密码错误' }, 401);
     }
-    const token = jwt.sign({ userId: user.id, username: user.username });
+    const token = signToken({ userId: user.id, username: user.username });
     json(res, { success: true, data: { token, user: { id: user.id, username: user.username, nickname: user.nickname } } });
   },
   
@@ -564,12 +566,12 @@ const server = http.createServer((req, res) => {
     }
     
     if (handler) {
-      try {
-        handler(req, res, user?.userId, parsedBody, params, query);
-      } catch (e) {
-        console.error('路由处理错误:', e);
-        json(res, { success: false, message: '服务器错误' }, 500);
-      }
+      Promise.resolve()
+        .then(() => handler(req, res, user?.userId, parsedBody, params, query))
+        .catch(e => {
+          console.error('路由处理错误:', e);
+          json(res, { success: false, message: '服务器错误' }, 500);
+        });
     } else {
       json(res, { success: false, message: '接口不存在' }, 404);
     }
