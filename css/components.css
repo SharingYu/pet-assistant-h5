@@ -813,3 +813,289 @@
   color: var(--primary);
   cursor: pointer;
 }
+
+/* ========== 现代化UI增强 ========== */
+
+/* 步骤条 - 现代化样式 */
+.steps-bar {
+  display: flex;
+  align-items: center;
+  padding: 16px 16px 12px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  overflow-x: auto;
+}
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 52px;
+}
+.step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  color: #999;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+.step-item.active .step-num {
+  background: linear-gradient(135deg, #FF9500, #FF6B00);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 149, 0, 0.4);
+}
+.step-text {
+  font-size: 10px;
+  color: #bbb;
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+.step-item.active .step-text {
+  color: #FF9500;
+  font-weight: 500;
+}
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: #e8e8e8;
+  margin: 0 4px;
+  margin-bottom: 18px;
+  min-width: 20px;
+  transition: background 0.3s;
+}
+.step-line.active {
+  background: linear-gradient(90deg, #FF9500, #FF6B00);
+}
+
+/* 诊断卡片 - 现代化 */
+.diagnosis-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 12px 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f5f5f5;
+  transition: all 0.2s;
+}
+.diagnosis-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* 橙色主题卡片 */
+.diagnosis-card-primary {
+  background: linear-gradient(135deg, #FF9500 0%, #FF6B00 100%);
+  color: #fff;
+  border: none;
+}
+
+/* 结果卡片 - 紧急程度 */
+.result-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.result-card.severity-danger {
+  border-left: 3px solid #FF4D4F;
+  background: #fff9f9;
+}
+.result-card.severity-warning {
+  border-left: 3px solid #FAAD14;
+  background: #fffbf0;
+}
+.result-card.severity-success {
+  border-left: 3px solid #52C41A;
+  background: #fafff2;
+}
+
+/* 严重程度徽章 */
+.severity-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.severity-badge.success { background: #f6ffed; color: #52c41a; }
+.severity-badge.warning { background: #fff7e6; color: #fa8c16; }
+.severity-badge.danger { background: #fff0f0; color: #ff4d4f; }
+
+/* 标签样式 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background: #f5f5f5;
+  color: #666;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
+
+/* 动作按钮组 */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  margin-top: 8px;
+}
+.action-buttons .btn {
+  flex: 1;
+  border-radius: 12px;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.action-buttons .btn:active {
+  transform: scale(0.97);
+}
+
+/* 橙色按钮 */
+.btn-primary {
+  background: linear-gradient(135deg, #FF9500, #FF6B00) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(255, 149, 0, 0.3);
+}
+.btn-primary:active {
+  background: linear-gradient(135deg, #e68600, #e65c00) !important;
+  box-shadow: none;
+}
+
+/* 上传区域 */
+.upload-zone {
+  border: 2px dashed #e0e0e0;
+  border-radius: 16px;
+  padding: 32px 16px;
+  text-align: center;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 0 16px;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: #FF9500;
+  background: #fff8f2;
+}
+
+/* 类型选择卡片 - 增强 */
+.type-card {
+  background: #fff;
+  border: 2px solid #f0f0f0;
+  border-radius: 16px;
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.type-card:hover {
+  border-color: #FFB84D;
+  background: #fffcf8;
+}
+.type-card.selected {
+  border-color: #FF9500;
+  background: #FFFBF5;
+  box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.15);
+}
+.type-card .type-icon {
+  font-size: 28px;
+  display: block;
+  margin: 0 auto 8px;
+  width: 44px;
+  height: 44px;
+}
+.type-card .type-icon svg, .type-card .type-icon .icon-20 {
+  width: 44px;
+  height: 44px;
+}
+.type-card .type-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+.type-card .type-desc {
+  font-size: 10px;
+  color: #999;
+  margin-top: 2px;
+}
+
+/* 社区参考区块 */
+.community-refs-section {
+  background: #f8f7ff;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 0 16px 16px;
+  border: 1px solid #e8e5ff;
+}
+
+/* 免责声明 */
+.disclaimer {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 8px 16px;
+  border-left: 3px solid #e0e0e0;
+}
+.disclaimer p {
+  font-size: 11px;
+  color: #999;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 分析中动画 */
+.analyzing-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+.analyzing-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #f0e0d0;
+  border-top-color: #FF9500;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 预览图片 */
+.preview-section {
+  position: relative;
+  margin: 0 16px 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.preview-image {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+/* 诊断页顶栏 */
+.diagnosis-header-bar {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}

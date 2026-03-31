@@ -468,6 +468,16 @@ const App = {
 
 // ========== Diagnosis Controller ==========
 const Diagnosis = {
+  goBack() {
+    const s = Pages.diagnosisState;
+    if (s.step === 1) {
+      App.navigateTo('home');
+    } else {
+      s.step = Math.max(1, s.step - 1);
+      App.navigateTo('diagnosis');
+    }
+  },
+
   selectPet(petId) {
     Pages.diagnosisState.selectedPetId = petId;
     App.navigateTo('diagnosis');
@@ -486,7 +496,12 @@ const Diagnosis = {
       App.navigateTo('diagnosis');
     }
   },
-  
+
+  selectType(type) {
+    Pages.diagnosisState.selectedType = type;
+    App.navigateTo('diagnosis');
+  },
+
   confirmType() {
     if (Pages.diagnosisState.selectedType) {
       Pages.diagnosisState.step = 3;

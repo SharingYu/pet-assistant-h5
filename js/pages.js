@@ -118,7 +118,18 @@ const Pages = {
   renderDiagnosis() {
     const s = this.diagnosisState;
     const pets = Store.getState('pets');
-    
+
+    // 诊断页顶部导航栏
+    const headerHtml = `
+      <div class="diagnosis-header-bar" style="display: flex; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; z-index: 50;">
+        <button class="page-back-btn" onclick="Diagnosis.goBack()" style="position: static; transform: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border: none; cursor: pointer; color: #333;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
+        </button>
+        <div style="flex: 1; text-align: center; font-size: 16px; font-weight: 600; color: #333;">AI 分诊</div>
+        <div style="width: 32px;"></div>
+      </div>
+    `;
+
     // 步骤条
     const stepHtml = `
       <div class="steps-bar">
@@ -497,9 +508,10 @@ const Pages = {
     
     return `
       <div class="page-content diagnosis-page">
-        <div class="diagnosis-header">
-          <h1>🔬 AI 看图诊断</h1>
-          <p>上传图片，AI 帮你初步判断宠物健康状况</p>
+        ${headerHtml}
+        <div style="background: linear-gradient(135deg, #FF9500 0%, #FF6B00 100%); padding: 16px 16px 12px; color: white;">
+          <div style="font-size: 18px; font-weight: 600; margin-bottom: 2px;">AI 分诊助手</div>
+          <div style="font-size: 12px; opacity: 0.9;">智能分析 · 专业准确 · 初步分诊</div>
         </div>
         ${stepHtml}
         ${content}

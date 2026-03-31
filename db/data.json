@@ -861,6 +861,217 @@
       "possibleConditions": [],
       "aiUsed": "qwen-vl-plus",
       "createdAt": "2026-03-31T15:31:30.731Z"
+    },
+    {
+      "id": "2a18b38c-7180-4154-8846-b7ba713c3328",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部大面积脱毛，红斑，剧烈瘙痒",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "犬背部脱毛、红斑和剧烈瘙痒，可能为皮肤病。",
+      "possibleCauses": [
+        "真菌感染",
+        "过敏性皮炎"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快带宠物就医检查。",
+      "homeCareAdvice": "观察症状变化，避免进一步刺激皮肤。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "createdAt": "2026-03-31T15:43:40.528Z"
+    },
+    {
+      "id": "9e8f1676-ed84-4163-a621-a8287f77c1c7",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部大面积脱毛，红斑，剧烈瘙痒",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "犬背部大面积脱毛、红斑和剧烈瘙痒，可能为皮肤疾病。",
+      "possibleCauses": [
+        "真菌感染",
+        "寄生虫感染"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "自行使用药物"
+        ]
+      },
+      "consultNow": "建议尽快带宠物就医检查。",
+      "homeCareAdvice": "观察症状变化并保持环境清洁。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "createdAt": "2026-03-31T15:43:50.524Z"
+    },
+    {
+      "id": "16e12346-fdb0-4dbb-a9f9-aaccca1ab171",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部大面积脱毛，红斑，剧烈瘙痒",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "犬背部大面积脱毛、红斑和剧烈瘙痒，可能为皮肤疾病。",
+      "possibleCauses": [
+        "真菌感染",
+        "过敏反应"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "不要自行使用药物"
+        ]
+      },
+      "consultNow": "建议尽快带去兽医处检查",
+      "homeCareAdvice": "观察症状变化并保持环境清洁",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T15:45:02.582Z"
+    },
+    {
+      "id": "0d560025-4ab9-4025-b951-16476a6cbd82",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部大面积脱毛，红斑，剧烈瘙痒",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "犬背部大面积脱毛、红斑和剧烈瘙痒，可能为皮肤病。",
+      "possibleCauses": [
+        "真菌感染",
+        "过敏性皮炎"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快带去兽医检查",
+      "homeCareAdvice": "观察症状变化并保持环境清洁",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T15:45:14.735Z"
+    },
+    {
+      "id": "39ca4314-e2bb-4efd-b4c5-09482731743e",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部大面积脱毛，红斑，剧烈瘙痒1周",
+      "imageUrl": "https://img.alicdn.com/imgextra/i3/O1CN018IxJLL1FHLjG8P1O5_!!6000000001393-0-tbvideo.jpg",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "犬背部脱毛、红斑和剧烈瘙痒一周，需进一步检查。",
+      "possibleCauses": [
+        "皮肤感染",
+        "过敏反应"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "不要自行使用药物"
+        ]
+      },
+      "consultNow": "建议尽快就医检查。",
+      "homeCareAdvice": "观察症状变化并保持环境清洁。",
+      "visualAnalysis": "该犬图片显示：1）皮肤有红肿和脱毛区域；2）眼睛正常，无明显异常；3）口鼻无异常分泌物；4）行动姿态正常；5）整体外观未见明显溃疡或其他异常。建议进一步检查皮肤状况。",
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T15:53:12.355Z"
     }
   ]
 }

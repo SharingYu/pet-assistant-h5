@@ -96,7 +96,7 @@ function renderDiagnosisTypeCard(type, selected, onClick) {
   const descs = { skin: '脱毛/红斑/瘙痒', eye: '红肿/分泌物', stool: '形状/颜色异常', behavior: '跛行/呕吐/精神差', mouth: '口臭/牙龈红肿', ear: '红肿/分泌物' };
 
   return `
-    <div class="type-card ${selected ? 'selected' : ''}" data-type="${type}">
+    <div class="type-card ${selected ? 'selected' : ''}" data-type="${type}" onclick="Diagnosis.selectType('${type}')">
       <span class="type-icon">${svgIcons[type] || '🔍'}</span>
       <span class="type-name">${names[type]}</span>
       <span class="type-desc">${descs[type]}</span>
