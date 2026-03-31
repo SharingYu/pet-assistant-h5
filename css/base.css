@@ -255,3 +255,30 @@ input, textarea, select {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* ========== Back Button ========== */
+.page-back-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.page-back-btn:hover {
+  background: var(--bg);
+}
+.page-header.with-back {
+  padding-left: 36px;
+}

@@ -817,7 +817,7 @@ async submitAuth() {
       res = await API_BASE.register(username, password, nickname);
     }
     
-    if (res.success && res.data.token) {
+    if (res.success && res.data && res.data.token) {
       TokenManager.setToken(res.data.token);
       TokenManager.setUser(res.data.user);
       Store.setUser(res.data.user);
@@ -827,16 +827,25 @@ async submitAuth() {
         App.hideLoading();
         App.navigateTo('home');
         TabBar.updateBadge();
+      }).catch(e => {
+        App.hideLoading();
+        Toast.error('数据加载失败，请刷新重试');
+        App.navigateTo('home');
+        TabBar.updateBadge();
       });
+      return;
     } else {
       s.error = res.message || '操作失败，请重试';
       s.loading = false;
-      container.innerHTML = this.renderAuth();
+      const c = document.getElementById('pagesContainer');
+      if (c) c.innerHTML = Pages.renderAuth();
     }
   } catch (e) {
-    s.error = '网络异常，请检查网络连接';
-    s.loading = false;
-    container.innerHTML = this.renderAuth();
+    console.error('submitAuth error:', e);
+    Pages.authState.error = '网络异常，请检查网络连接';
+    Pages.authState.loading = false;
+    const c = document.getElementById('pagesContainer');
+    if (c) c.innerHTML = Pages.renderAuth();
   }
 },
 
