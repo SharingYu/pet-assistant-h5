@@ -350,7 +350,7 @@ const routes = {
     json(res, { success: true, data: DB.pets.findByUser(userId) });
   },
   
-  'POST /api/pets': (req, res, _, body) => {
+  'POST /api/pets': (req, res, userId, body) => {
     if (!body.name) return json(res, { success: false, message: '宠物名字不能为空' }, 400);
     const pet = DB.pets.create({ ...body, userId });
     json(res, { success: true, data: pet });
@@ -391,7 +391,7 @@ const routes = {
     json(res, { success: true, data: DB.reminders.findByUser(userId, query.include_done === 'true') });
   },
   
-  'POST /api/reminders': (req, res, _, body) => {
+  'POST /api/reminders': (req, res, userId, body) => {
     if (!body.petId || !body.title || !body.reminderDate) {
       return json(res, { success: false, message: '缺少必要参数' }, 400);
     }
