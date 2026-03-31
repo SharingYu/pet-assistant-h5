@@ -1099,3 +1099,113 @@
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
+
+/* ========== 首页增强 ========== */
+.home-header h1 {
+  color: inherit;
+}
+
+/* 快捷服务卡片 */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 0 16px 16px;
+}
+.action-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: #FFB84D;
+}
+.action-card:active {
+  transform: scale(0.97);
+}
+.action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.action-icon svg {
+  width: 24px;
+  height: 24px;
+  color: #FF9500;
+}
+.action-name {
+  font-size: 11px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 近期提醒项 */
+.reminder-preview-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #f0f0f0;
+}
+.reminder-preview-item:hover {
+  border-color: #FFB84D;
+  box-shadow: 0 2px 8px rgba(255,149,0,0.1);
+}
+.reminder-preview-item .reminder-content {
+  flex: 1;
+  min-width: 0;
+}
+.reminder-preview-item .reminder-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.reminder-preview-item .reminder-sub {
+  font-size: 12px;
+  color: #999;
+}
+.reminder-preview-item .reminder-date {
+  font-size: 12px;
+  color: #FF9500;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* section header */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 16px 8px;
+}
+.section-header h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-more {
+  font-size: 12px;
+  color: #FF9500;
+  cursor: pointer;
+  font-weight: 500;
+}

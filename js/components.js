@@ -68,16 +68,32 @@ const TabBar = {
 
 // 宠物卡片
 function renderPetCard(pet, onClick) {
-  const emoji = API.petTypes.find(t => t.id === pet.type)?.emoji || '🐾';
-  const avatar = pet.avatar 
-    ? `<img src="${pet.avatar}" alt="${pet.name}">` 
+  const petType = API.petTypes.find(t => t.id === pet.type);
+  const emoji = petType?.emoji || '<svg class="icon-32" viewBox="0 0 24 24"><use href="#icon-logo"/></svg>';
+  const avatar = pet.avatar
+    ? `<img src="${pet.avatar}" alt="${pet.name}">`
     : `<span style="font-size:36px">${emoji}</span>`;
-  
+
+  // 计算宠物年龄
+  let ageStr = '';
+  if (pet.birthday) {
+    const birth = new Date(pet.birthday);
+    const now = new Date();
+    const months = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth());
+    if (months < 12) {
+      ageStr = `${months}个月`;
+    } else {
+      const years = Math.floor(months / 12);
+      const ms = months % 12;
+      ageStr = ms > 0 ? `${years}岁${ms}月` : `${years}岁`;
+    }
+  }
+
   return `
-    <div class="pet-card" data-pet-id="${pet.id}">
+    <div class="pet-card" data-pet-id="${pet.id}" onclick="App.navigateTo('petProfile', '${pet.id}')">
       <div class="pet-avatar">${avatar}</div>
       <div class="pet-name">${pet.name}</div>
-      <div class="pet-breed">${pet.breed || ''}</div>
+      <div class="pet-breed">${pet.breed || pet.type || ''} ${ageStr ? '· ' + ageStr : ''}</div>
     </div>
   `;
 }

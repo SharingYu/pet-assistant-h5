@@ -30,12 +30,36 @@ const Pages = {
           <div class="empty-text">点击下方按钮添加你的毛孩子</div>
           <button class="btn btn-primary" onclick="App.showAddPetModal()">添加宠物</button>
         </div>`;
-    
+
+    // 统计信息
+    const petCount = pets.length;
+    const reminderCount = reminders.filter(r => !r.done).length;
+    const todayReminders = reminders.filter(r => {
+      if (r.done) return false;
+      const d = new Date(r.reminderDate || r.date);
+      const today = new Date();
+      return d.toDateString() === today.toDateString();
+    }).length;
+
     return `
       <div class="page-content home-page">
-        <div class="home-header">
-          <h1>你好，${Store.state.user?.nickname || '铲屎官'} 👋</h1>
-          <p>今天毛孩子状态如何？</p>
+        <div class="home-header" style="background: linear-gradient(135deg, #FF9500 0%, #FF6B00 100%); color: white; padding: 20px 16px 16px; margin: -12px -16px 0; border-radius: 0 0 20px 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h1 style="font-size: 22px; margin: 0 0 4px;">你好，${Store.state.user?.nickname || '铲屎官'}</h1>
+              <p style="margin: 0; opacity: 0.9; font-size: 13px;">${petCount > 0 ? '毛孩子们等你照顾～' : '添加你的第一个宠物吧'}</p>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 28px; font-weight: 700;">${petCount}</div>
+              <div style="font-size: 11px; opacity: 0.85;">只宠物</div>
+            </div>
+          </div>
+          ${todayReminders > 0 ? `
+          <div style="background: rgba(255,255,255,0.2); border-radius: 10px; padding: 8px 12px; margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span style="font-size: 13px;">今日有 <strong>${todayReminders}</strong> 个提醒待处理</span>
+          </div>
+          ` : ''}
         </div>
         
         ${petsHtml}
@@ -53,7 +77,7 @@ const Pages = {
             <span class="action-name">宠友圈</span>
           </div>
           <div class="action-card" onclick="App.showDiagnosisHistory()">
-            <span class="action-icon">📋</span>
+            <span class="action-icon"><svg class="icon-20" viewBox="0 0 24 24"><use href="#icon-stethoscope"/></svg></span>
             <span class="action-name">诊断历史</span>
           </div>
           <div class="action-card" onclick="App.navigateTo('reminders')">
