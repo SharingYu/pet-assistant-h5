@@ -84,13 +84,20 @@ function renderPetCard(pet, onClick) {
 
 // 诊断类型卡片
 function renderDiagnosisTypeCard(type, selected, onClick) {
-  const icons = { skin: '🔴', eye: '👁️', stool: '💩', behavior: '🌀', mouth: '🦷', ear: '👂' };
+  const svgIcons = {
+    skin: '<svg class="type-icon-svg" viewBox="0 0 24 24"><use href="#icon-skin"/></svg>',
+    eye: '<svg class="type-icon-svg" viewBox="0 0 24 24"><use href="#icon-eye"/></svg>',
+    ear: '<svg class="type-icon-svg" viewBox="0 0 24 24"><use href="#icon-ear"/></svg>',
+    mouth: '<svg class="type-icon-svg" viewBox="0 0 24 24"><use href="#icon-mouth"/></svg>',
+    stool: '<svg class="type-icon-svg" viewBox="0 0 24 24"><use href="#icon-stool"/></svg>',
+    behavior: '<svg class="type-icon-svg" viewBox="0 0 24 24"><use href="#icon-behavior"/></svg>'
+  };
   const names = { skin: '皮肤问题', eye: '眼睛异常', stool: '排泄物异常', behavior: '行为异常', mouth: '口腔问题', ear: '耳部问题' };
   const descs = { skin: '脱毛/红斑/瘙痒', eye: '红肿/分泌物', stool: '形状/颜色异常', behavior: '跛行/呕吐/精神差', mouth: '口臭/牙龈红肿', ear: '红肿/分泌物' };
-  
+
   return `
     <div class="type-card ${selected ? 'selected' : ''}" data-type="${type}">
-      <span class="type-icon">${icons[type]}</span>
+      <span class="type-icon">${svgIcons[type] || '🔍'}</span>
       <span class="type-name">${names[type]}</span>
       <span class="type-desc">${descs[type]}</span>
     </div>

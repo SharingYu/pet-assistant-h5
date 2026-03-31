@@ -17,19 +17,19 @@
     <!-- TabBar -->
     <nav class="tabbar" id="tabbar">
       <div class="tab-item active" data-tab="home">
-        <span class="tab-icon">🏠</span>
+        <span class="tab-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-home"/></svg></span>
         <span class="tab-label">首页</span>
       </div>
       <div class="tab-item" data-tab="diagnosis">
-        <span class="tab-icon">🔬</span>
+        <span class="tab-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-stethoscope"/></svg></span>
         <span class="tab-label">AI诊断</span>
       </div>
       <div class="tab-item" data-tab="community">
-        <span class="tab-icon">🌟</span>
+        <span class="tab-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-community"/></svg></span>
         <span class="tab-label">社区</span>
       </div>
       <div class="tab-item" data-tab="reminders">
-        <span class="tab-icon">⏰</span>
+        <span class="tab-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-reminder"/></svg></span>
         <span class="tab-label">提醒</span>
         <span class="tab-badge" id="reminderBadge" style="display:none;">0</span>
       </div>
@@ -40,7 +40,7 @@
 
     <!-- Loading Overlay -->
     <div id="loadingOverlay" style="position:fixed;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:9999;opacity:0;transition:opacity 0.3s;">
-      <div style="font-size:48px;margin-bottom:16px;">🐾</div>
+      <div style="width:64px;height:64px;margin-bottom:16px;"><svg viewBox="0 0 40 40"><use href="#icon-logo"/></svg></div>
       <div class="spinner" style="margin-bottom:16px;"></div>
       <div style="font-size:14px;color:var(--text-secondary);">加载中...</div>
     </div>
@@ -59,6 +59,7 @@
   <script src="js/api.js"></script>
   <script src="js/components.js"></script>
   <script src="js/pages.js"></script>
+  <script src="js/icons.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

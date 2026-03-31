@@ -91,27 +91,73 @@ const API = {
 
   // ========== 宠物类型（静态配置） ==========
   petTypes: [
-    { id: 'cat', name: '🐱 猫咪', emoji: '🐱' },
-    { id: 'dog', name: '🐶 狗狗', emoji: '🐶' },
-    { id: 'rabbit', name: '🐰 兔子', emoji: '🐰' },
-    { id: 'hamster', name: '🐹 仓鼠', emoji: '🐹' },
-    { id: 'other', name: '🐾 其他', emoji: '🐾' }
+    { id: 'cat', name: '🐱 猫咪', emoji: '<svg class="icon-20" viewBox="0 0 24 24"><use href="#icon-pet-cat"/></svg>' },
+    { id: 'dog', name: '🐶 狗狗', emoji: '<svg class="icon-20" viewBox="0 0 24 24"><use href="#icon-pet-dog"/></svg>' },
+    { id: 'rabbit', name: '🐰 兔子', emoji: '<svg class="icon-20" viewBox="0 0 24 24"><use href="#icon-pet-rabbit"/></svg>' },
+    { id: 'hamster', name: '🐹 仓鼠', emoji: '<svg class="icon-20" viewBox="0 0 24 24"><use href="#icon-pet-hamster"/></svg>' },
+    { id: 'other', name: '🐾 其他', emoji: '<svg class="icon-20" viewBox="0 0 24 24"><use href="#icon-logo"/></svg>' }
   ],
 
   // ========== 诊断方法（调用后端，fallback本地mock） ==========
-  async diagnose(type, imageData) {
-    try {
-      // 优先调用后端 API
-      const result = await API_BASE.diagnose(type, imageData);
-      if (result.success) {
-        return result;
-      }
-    } catch (e) {
-      // 网络失败时fallback到本地mock
+  // 诊断类型 → 身体部位映射
+  typeToBodyPart: {
+    skin: 'skin', eye: 'eye', ear: 'ear', mouth: 'mouth',
+    stool: 'digestive', behavior: 'behavioral',
+    respiratory: 'respiratory', urinary: 'urinary'
+  },
+
+  async diagnose(petTypeOrParams, bodyPartOrImage, symptomsOrNull, imageUrlOrNull) {
+    // 新格式：diagnose({ petType, bodyPart, symptoms, imageUrl })
+    // 旧格式：diagnose(type, imageData) 兼容
+    let petType, bodyPart, symptoms, imageUrl;
+    if (typeof petTypeOrParams === 'object') {
+      // 新格式
+      ({ petType, bodyPart, symptoms, imageUrl } = petTypeOrParams);
+    } else {
+      // 旧格式兼容
+      petType = 'dog'; // 默认
+      bodyPart = this.typeToBodyPart[petTypeOrParams] || petTypeOrParams;
+      symptoms = '';
+      imageUrl = bodyPartOrImage;
     }
 
-    // Fallback: 本地mock逻辑
-    const kb = this.diagnosisKB[type] || this.diagnosisKB.skin;
+    try {
+      // 调用后端真实 AI 诊断
+      const result = await API_BASE.diagnose({ petType, bodyPart, symptoms: symptoms || '', imageUrl });
+      if (result.success) {
+        // 转换后端格式为前端兼容格式
+        const d = result.data;
+        return {
+          success: true,
+          data: {
+            type: bodyPart,
+            typeName: this.getTypeName(bodyPart) || bodyPart,
+            triage: d.triage,
+            severity: { level: d.severity <= 2 ? 'normal' : d.severity <= 3 ? 'warning' : 'danger', label: d.severityLabel, class: d.severity <= 2 ? 'success' : d.severity <= 3 ? 'warning' : 'danger' },
+            tags: d.possibleCauses || [],
+            causes: d.possibleCauses || [],
+            severityLevel: d.severity,
+            triage: d.triage,
+            urgentRedFlags: d.urgentRedFlags || [],
+            homeCare: d.homeCare || {},
+            consultNow: d.consultNow,
+            homeCareAdvice: d.homeCareAdvice,
+            summary: d.summary,
+            visualAnalysis: d.visualAnalysis,
+            possibleConditions: d.possibleConditions || [],
+            aiAdvice: d.consultNow || d.summary || '',
+            disclaimer: '本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。如有疑虑，请立即前往正规宠物医院就诊。',
+            image: imageUrl,
+            aiUsed: d.aiUsed
+          }
+        };
+      }
+    } catch (e) {
+      console.error('AI诊断请求失败:', e);
+    }
+
+    // Fallback: 本地mock逻辑（当后端不可用时）
+    const kb = this.diagnosisKB[bodyPart] || this.diagnosisKB.skin;
     const tagCount = Math.floor(Math.random() * 2) + 1;
     const tags = [...kb.tags].sort(() => Math.random() - 0.5).slice(0, tagCount);
     const causeCount = Math.floor(Math.random() * 2) + 1;
@@ -129,17 +175,17 @@ const API = {
     return {
       success: true,
       data: {
-        type,
-        typeName: this.getTypeName(type),
-        typeIcon: this.getTypeIcon(type),
+        type: bodyPart,
+        typeName: this.getTypeName(bodyPart),
+        typeIcon: this.getTypeIcon(bodyPart),
         tags,
         causes,
         severity,
         suggestion: kb.advice,
         homeCare: kb.homeCare,
         medicine: kb.medicine,
-        aiAdvice: this.generateAIAdvice(type, tags, severity),
-        image: imageData,
+        aiAdvice: this.generateAIAdvice(bodyPart, tags, severity),
+        image: imageUrl,
         similarCount: Math.floor(Math.random() * 200) + 50,
         disclaimer: '本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。如有疑虑，请立即前往正规宠物医院就诊。'
       }

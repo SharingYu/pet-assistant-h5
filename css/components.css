@@ -36,8 +36,16 @@
 }
 
 .tab-item .tab-icon {
-  font-size: 24px;
+  width: 24px;
+  height: 24px;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tab-item .tab-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
 .tab-item .tab-label {
@@ -142,6 +150,13 @@
 
 .action-icon {
   font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.action-icon svg {
+  width: 28px;
+  height: 28px;
 }
 
 .action-name {
@@ -181,6 +196,15 @@
   font-size: 28px;
   display: block;
   margin-bottom: var(--space-xs);
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.type-card .type-icon svg,
+.type-card .type-icon .icon-20 {
+  width: 40px;
+  height: 40px;
 }
 
 .type-card .type-name {
@@ -216,6 +240,12 @@
   font-size: 48px;
   display: block;
   margin-bottom: var(--space-sm);
+  width: 48px;
+  height: 48px;
+}
+.upload-zone .upload-icon svg {
+  width: 48px;
+  height: 48px;
 }
 
 .upload-zone .upload-text {
@@ -616,6 +646,12 @@
   font-size: 64px;
   display: block;
   margin-bottom: var(--space-base);
+  width: 64px;
+  height: 64px;
+}
+.empty-icon svg {
+  width: 64px;
+  height: 64px;
 }
 
 .empty-title {

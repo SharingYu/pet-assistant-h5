@@ -474,7 +474,14 @@ const Diagnosis = {
   },
   
   confirmPet() {
-    if (Pages.diagnosisState.selectedPetId) {
+    const petId = Pages.diagnosisState.selectedPetId;
+    if (petId) {
+      const pets = Store.getState('pets');
+      const pet = pets.find(p => p.id === petId);
+      if (pet) {
+        Pages.diagnosisState.selectedPetType = pet.type;
+        Pages.diagnosisState.selectedPetName = pet.name;
+      }
       Pages.diagnosisState.step = 2;
       App.navigateTo('diagnosis');
     }
@@ -486,10 +493,26 @@ const Diagnosis = {
       App.navigateTo('diagnosis');
     }
   },
-  
+
+  confirmSymptoms() {
+    const s = Pages.diagnosisState;
+    const textarea = document.getElementById('symptomInput');
+    if (textarea) {
+      s.symptoms = textarea.value.trim();
+    }
+    s.step = 4;
+    App.navigateTo('diagnosis');
+  },
+
   changeType() {
     Pages.diagnosisState.step = 2;
     Pages.diagnosisState.selectedType = null;
+    Pages.diagnosisState.symptoms = '';
+    App.navigateTo('diagnosis');
+  },
+
+  backToType() {
+    Pages.diagnosisState.step = 2;
     App.navigateTo('diagnosis');
   },
   
@@ -520,17 +543,23 @@ const Diagnosis = {
     const s = Pages.diagnosisState;
     s.analyzing = true;
     App.navigateTo('diagnosis');
-    
-    const result = await API.diagnose(s.selectedType, s.uploadedImage);
-    
+
+    // 新格式：petType + bodyPart + symptoms + imageUrl
+    const result = await API.diagnose({
+      petType: s.selectedPetType || 'dog',
+      bodyPart: s.selectedType,
+      symptoms: s.symptoms || '',
+      imageUrl: s.uploadedImage
+    });
+
     if (result.success) {
       s.result = result.data;
-      s.step = 4;
+      s.step = 5;
       s.similarCases = await API.getSimilarCases(s.selectedType);
     } else {
       Toast.error('诊断失败，请重试');
     }
-    
+
     s.analyzing = false;
     App.navigateTo('diagnosis');
   },

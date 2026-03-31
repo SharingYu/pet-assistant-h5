@@ -6,6 +6,118 @@
       "password": "29c40ba0eeb4bd77eac80f1316420cb96070a40161582850e422c3621b5c1a65",
       "nickname": "test001",
       "createdAt": "2026-03-31T03:46:38.431Z"
+    },
+    {
+      "id": "357917a0-ae1c-4f14-996a-38d9933bc2c5",
+      "username": "test002",
+      "password": "29c40ba0eeb4bd77eac80f1316420cb96070a40161582850e422c3621b5c1a65",
+      "nickname": "test2",
+      "createdAt": "2026-03-31T06:24:43.691Z"
+    },
+    {
+      "id": "ba9c51c4-4a1c-4d3d-b4c2-90e65f3ab431",
+      "username": "u1774938387",
+      "password": "29c40ba0eeb4bd77eac80f1316420cb96070a40161582850e422c3621b5c1a65",
+      "nickname": "tester",
+      "createdAt": "2026-03-31T06:26:27.979Z"
+    },
+    {
+      "id": "7faf3bd2-079e-4a58-945f-3d7802a57ef9",
+      "username": "sec001",
+      "password": "$2a$10$M82tLf9t4PTPXO9PLpn5ZO8RlK7VpTy.dYfqKXQmTJaixCD0dDW7.",
+      "nickname": "安全测试",
+      "createdAt": "2026-03-31T06:40:19.269Z"
+    },
+    {
+      "id": "b3519ffe-6a76-436b-9f91-be59d17635e7",
+      "username": "e2e1774939480",
+      "password": "$2a$10$Hix7UnPBYIFqdwq84Vloz.OwNT0lVZuADTn7GFX8uriPuVxaBXMg.",
+      "nickname": "E2E测试",
+      "createdAt": "2026-03-31T06:44:40.153Z"
+    },
+    {
+      "id": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "username": "finalcheck",
+      "password": "$2a$10$8w//WdBEDYeh9PtlAL3T8uexOlzDFKQa.x5RJiNzQG/xrLP.5QbCa",
+      "nickname": "最终核查",
+      "createdAt": "2026-03-31T06:45:39.317Z"
+    },
+    {
+      "id": "838ccc86-0d84-4a8c-a889-2521fbec0642",
+      "username": "t1774939682",
+      "password": "$2a$10$HMKBZqvrV4aw.uEla0SqB.o7oZp61i7i8Mx6pEvsRwIrII1gwp8zm",
+      "nickname": "T",
+      "createdAt": "2026-03-31T06:48:02.843Z"
+    },
+    {
+      "id": "c1e2783f-f9dc-45aa-8003-1645176b01ab",
+      "username": "commentfix",
+      "password": "$2a$10$gfiWxoBzjNNfRoDHJvv8kuazfjqKeOBLeMxPhTLDZEHAdNpDzbZ1W",
+      "nickname": "CF",
+      "createdAt": "2026-03-31T07:23:26.120Z"
+    },
+    {
+      "id": "e83f6628-69da-4d44-8e84-0474cb5e2fea",
+      "username": "finaltest",
+      "password": "$2a$10$vYogBCd6jjJxUZmx3gMLm.pzfWq.RZSmgum3jlj9aI1KD69A5Ny96",
+      "nickname": "FT",
+      "createdAt": "2026-03-31T07:43:43.546Z"
+    },
+    {
+      "id": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
+      "username": "e2e1774945533",
+      "password": "$2a$10$RNuLwF9v5I8sUSD7uCbviujC3P1wZYyBXPWnhNj4IExXrfz6ctfWW",
+      "nickname": "E2E用户",
+      "createdAt": "2026-03-31T08:25:33.799Z"
+    },
+    {
+      "id": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "username": "ysy",
+      "password": "$2a$10$NPylZfqvkkoYJeHyj3Sby.PJ8XLW5G.aLOPIsQuJUlpVK8wMKAr4W",
+      "nickname": "ysy",
+      "createdAt": "2026-03-31T13:37:25.123Z"
+    },
+    {
+      "id": "9e6bcea2-a9d4-4dd3-83c0-9cba189bd265",
+      "username": "鱼头叫我注册的",
+      "password": "$2a$10$vxL2kWfuWnO4QNAUrN.rneF4GRwnGdyRgOOs6gMhS2IjlCom4xSs2",
+      "nickname": "包包",
+      "createdAt": "2026-03-31T13:40:35.445Z"
+    },
+    {
+      "id": "79fb96f9-ee88-47e7-a8b9-3a0afffe12d0",
+      "username": "Y",
+      "password": "$2a$10$p9Wl8olN3WCVgse8tKam0eP1c.ixZb3AjUJWipAkT.92eodwTgOHa",
+      "nickname": "Y",
+      "createdAt": "2026-03-31T13:43:01.698Z"
+    },
+    {
+      "id": "f557431e-db49-45db-b7a6-03ce9ea32bab",
+      "username": "中文测试",
+      "password": "$2a$10$qQB8ZQHYgYzA8B3Y5rvpxul89hLeysng6YcYqVyIpwINYy5uVyWg.",
+      "nickname": "中文昵称",
+      "createdAt": "2026-03-31T13:45:00.900Z"
+    },
+    {
+      "id": "1c653e43-9591-41cb-8168-e901a268f98e",
+      "username": "前端测试",
+      "password": "$2a$10$d0DeSUFtPQnDvMT/aIvx8.3GtVH9y9FZtwp7Z74Q.l0v2sO4wVcgm",
+      "nickname": "前端用户",
+      "createdAt": "2026-03-31T13:47:10.240Z"
+    },
+    {
+      "id": "e34656f3-3fe8-49d2-a77b-5f8b94362c33",
+      "username": "虞诗远",
+      "password": "$2a$10$9FKu9tjJFA.0EKt2IPg7huVG1OfacfDwY6ijqGViybE6IxqmOZrs.",
+      "nickname": "老虞",
+      "createdAt": "2026-03-31T13:49:50.962Z"
+    },
+    {
+      "id": "ae3fd53f-1af7-4c78-860e-7d0ba07d6bd1",
+      "username": "yushiyuan",
+      "password": "$2a$10$1gMea1Cr7g4lWSOqHJ8rIOm.Xxvt8m6ghZ0DuZOmFf33wpZWeOdS6",
+      "nickname": "yushiyuan",
+      "createdAt": "2026-03-31T13:53:04.502Z"
     }
   ],
   "pets": [
@@ -17,6 +129,59 @@
       "age": 3,
       "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
       "createdAt": "2026-03-31T03:47:14.292Z"
+    },
+    {
+      "id": "5a870b00-62ca-417f-9449-60d382891263",
+      "name": "金毛",
+      "type": "dog",
+      "breed": "金毛寻回犬",
+      "userId": "838ccc86-0d84-4a8c-a889-2521fbec0642",
+      "createdAt": "2026-03-31T06:48:02.956Z"
+    },
+    {
+      "id": "2c1d167d-dc2e-4cd1-a21d-4c8ad8df594c",
+      "name": "旺财",
+      "type": "dog",
+      "breed": "柯基",
+      "age": 2,
+      "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
+      "createdAt": "2026-03-31T08:25:33.944Z"
+    },
+    {
+      "id": "a3dd34e2-73a7-4c74-8e21-c7ce428f1293",
+      "name": "包包",
+      "type": "cat",
+      "breed": "英国长毛猫",
+      "birthday": "",
+      "gender": "female",
+      "weight": 0,
+      "sterilization": false,
+      "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "createdAt": "2026-03-31T13:37:49.629Z"
+    },
+    {
+      "id": "de4c30c3-0e57-4ebd-b2f9-ff51b42c8571",
+      "name": "包包",
+      "type": "cat",
+      "breed": "长毛金渐层",
+      "birthday": "2025-02-23",
+      "gender": "male",
+      "weight": 5,
+      "sterilization": false,
+      "userId": "79fb96f9-ee88-47e7-a8b9-3a0afffe12d0",
+      "createdAt": "2026-03-31T13:43:54.471Z"
+    },
+    {
+      "id": "8cfef054-0fbd-47ec-89be-70ea4754cc79",
+      "name": "laoyu",
+      "type": "dog",
+      "breed": "中华田园犬",
+      "birthday": "2026-03-31",
+      "gender": "male",
+      "weight": 0,
+      "sterilization": false,
+      "userId": "ae3fd53f-1af7-4c78-860e-7d0ba07d6bd1",
+      "createdAt": "2026-03-31T13:53:31.627Z"
     }
   ],
   "healthRecords": [
@@ -42,22 +207,344 @@
       "recordType": "vaccine",
       "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
       "createdAt": "2026-03-31T04:20:18.507Z"
+    },
+    {
+      "id": "4ba1d1ca-c839-42b5-bc6f-6b0a77a454cc",
+      "petId": "2c1d167d-dc2e-4cd1-a21d-4c8ad8df594c",
+      "type": "狂犬疫苗",
+      "recordType": "vaccine",
+      "date": "2026-03-01",
+      "done": true,
+      "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
+      "createdAt": "2026-03-31T08:25:33.994Z"
     }
   ],
   "reminders": [
     {
-      "id": "3da508c6-cafa-461b-aff7-0dadcc3262f0",
-      "petId": "54d966d4-9f03-4576-95e2-5209631b6b39",
-      "title": "打疫苗",
-      "reminderDate": "2026-04-05T10:00:00Z",
-      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "id": "03a82bd7-da09-47ef-9c94-7c6f58d80616",
+      "petId": "test",
+      "petName": "金毛",
+      "type": "vaccine",
+      "title": "年度体检",
+      "reminderDate": "2026-05-01",
+      "icon": "🏥",
+      "color": "#1890FF",
+      "reminderTypeName": "体检",
+      "userId": "838ccc86-0d84-4a8c-a889-2521fbec0642",
       "done": false,
-      "createdAt": "2026-03-31T03:47:34.866Z"
+      "createdAt": "2026-03-31T06:48:03.004Z"
+    },
+    {
+      "id": "f35fa9ff-3ee7-4068-94f5-44096b2e7449",
+      "petId": "2c1d167d-dc2e-4cd1-a21d-4c8ad8df594c",
+      "petName": "旺财",
+      "type": "vaccine",
+      "title": "加强针",
+      "reminderDate": "2026-05-01",
+      "icon": "💉",
+      "color": "#52C41A",
+      "reminderTypeName": "疫苗",
+      "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
+      "done": false,
+      "createdAt": "2026-03-31T08:25:34.017Z"
+    },
+    {
+      "id": "6e5c5a57-32e7-4157-b055-dbc28e4dfceb",
+      "petId": "a3dd34e2-73a7-4c74-8e21-c7ce428f1293",
+      "petName": "包包",
+      "type": "vaccine",
+      "title": "第三针",
+      "reminderDate": "2026-04-08",
+      "icon": "💉",
+      "color": "#52C41A",
+      "reminderTypeName": "疫苗",
+      "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "done": false,
+      "createdAt": "2026-03-31T13:39:01.069Z"
     }
   ],
-  "posts": [],
-  "comments": [],
-  "likes": [],
+  "posts": [
+    {
+      "id": "66c2e5ed-79a6-4657-9834-316c139e8b14",
+      "content": "安全升级测试",
+      "topic": "#晒宠#",
+      "author": {
+        "name": "sec001",
+        "petName": "豆豆",
+        "petType": "dog"
+      },
+      "userId": "7faf3bd2-079e-4a58-945f-3d7802a57ef9",
+      "likes": 0,
+      "commentsCount": 0,
+      "createdAt": "2026-03-31T06:41:28.969Z"
+    },
+    {
+      "id": "d2310546-63a1-4c29-8e92-de2e96d92d00",
+      "content": "E2E测试帖子：柴犬太可爱了！",
+      "topic": "#晒宠#",
+      "author": {
+        "name": "e2e1774939480",
+        "petName": "豆豆",
+        "petType": "dog"
+      },
+      "userId": "b3519ffe-6a76-436b-9f91-be59d17635e7",
+      "likes": 2,
+      "commentsCount": 2,
+      "createdAt": "2026-03-31T06:44:40.756Z"
+    },
+    {
+      "id": "860b4bab-bbc8-40b1-9037-af3c76bbf5be",
+      "content": "最终测试帖子",
+      "topic": "#健康#",
+      "author": {
+        "name": "finalcheck",
+        "petName": "最终宠物",
+        "petType": "dog"
+      },
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "likes": 0,
+      "commentsCount": 0,
+      "createdAt": "2026-03-31T06:45:39.472Z"
+    },
+    {
+      "id": "63c86b26-4aa0-4c6d-b330-ea92be4fed26",
+      "content": "全流程测试成功！",
+      "topic": "#晒宠#",
+      "author": {
+        "name": "t1774939682",
+        "petName": "金毛",
+        "petType": "dog"
+      },
+      "userId": "838ccc86-0d84-4a8c-a889-2521fbec0642",
+      "likes": 0,
+      "commentsCount": 0,
+      "createdAt": "2026-03-31T06:48:03.053Z"
+    },
+    {
+      "id": "5e41952b-6351-4c5b-b583-256c864e4cde",
+      "content": "评论测试",
+      "topic": "#测试#",
+      "author": {
+        "name": "finalcheck",
+        "petName": "测试",
+        "petType": "dog"
+      },
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "likes": 0,
+      "commentsCount": 1,
+      "createdAt": "2026-03-31T07:07:54.681Z"
+    },
+    {
+      "id": "34502910-828f-4e97-8807-6f0ba7372950",
+      "content": "找评论测试",
+      "topic": "#测试#",
+      "author": {
+        "name": "finalcheck",
+        "petName": "测试",
+        "petType": "dog"
+      },
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "likes": 0,
+      "commentsCount": 1,
+      "createdAt": "2026-03-31T07:11:01.046Z"
+    },
+    {
+      "id": "084bdadd-5d24-45d7-976c-b5f9fcb9a15e",
+      "content": "debug",
+      "topic": "#测试#",
+      "author": {
+        "name": "f",
+        "petName": "t",
+        "petType": "dog"
+      },
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "likes": 0,
+      "commentsCount": 1,
+      "createdAt": "2026-03-31T07:12:17.286Z"
+    },
+    {
+      "id": "978a40f9-5df4-4979-8afa-6a6c6681ad15",
+      "content": "评论修复测试",
+      "topic": "#测试#",
+      "author": {
+        "name": "f",
+        "petName": "t",
+        "petType": "dog"
+      },
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "likes": 0,
+      "commentsCount": 1,
+      "createdAt": "2026-03-31T07:14:33.580Z"
+    },
+    {
+      "id": "61d3ab2a-7d93-4346-82ee-a3bccc9b5f36",
+      "content": "评论终于好了",
+      "topic": "#测试#",
+      "author": {
+        "name": "cf",
+        "petName": "test",
+        "petType": "dog"
+      },
+      "userId": "c1e2783f-f9dc-45aa-8003-1645176b01ab",
+      "likes": 0,
+      "commentsCount": 1,
+      "createdAt": "2026-03-31T07:23:26.228Z"
+    },
+    {
+      "id": "735bb178-f516-46b7-8894-a517a49115fd",
+      "content": "评论测试最终版",
+      "topic": "#测试#",
+      "author": {
+        "name": "cf",
+        "petName": "t",
+        "petType": "dog"
+      },
+      "userId": "c1e2783f-f9dc-45aa-8003-1645176b01ab",
+      "likes": 0,
+      "commentsCount": 1,
+      "createdAt": "2026-03-31T07:39:12.031Z"
+    },
+    {
+      "id": "5db72231-8908-445f-8927-e58e69cadbb7",
+      "content": "评论测试",
+      "topic": "#测试#",
+      "author": {
+        "name": "cf",
+        "petName": "t",
+        "petType": "dog"
+      },
+      "userId": "c1e2783f-f9dc-45aa-8003-1645176b01ab",
+      "likes": 0,
+      "commentsCount": 1,
+      "createdAt": "2026-03-31T07:43:43.079Z"
+    },
+    {
+      "id": "5f45875f-c3a9-480c-8254-d94376822dfe",
+      "content": "E2E测试帖子",
+      "topic": "#晒宠#",
+      "author": {
+        "name": "e2e1774945533",
+        "petName": "旺财",
+        "petType": "dog"
+      },
+      "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
+      "likes": 0,
+      "commentsCount": 0,
+      "createdAt": "2026-03-31T08:25:34.042Z"
+    }
+  ],
+  "comments": [
+    {
+      "id": "4baf29f6-dcac-4de8-8ecc-5b8f3612237c",
+      "content": "测试评论",
+      "postId": "post_001",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T06:24:43.764Z"
+    },
+    {
+      "id": "46cb77da-ac3c-4c3d-ae5f-dbdf6f204465",
+      "content": "评论测试",
+      "postId": "e2735a67-5066-4a05-9f93-7830b550176b",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T06:28:14.845Z"
+    },
+    {
+      "id": "1ecbad42-eaeb-4e42-a50d-dd0e88b634f4",
+      "content": "好可爱的柴犬！",
+      "postId": "d2310546-63a1-4c29-8e92-de2e96d92d00",
+      "userId": "b3519ffe-6a76-436b-9f91-be59d17635e7",
+      "createdAt": "2026-03-31T06:44:40.839Z"
+    },
+    {
+      "id": "d0b4a158-503c-4cfb-b25d-5c708f8a8ab5",
+      "content": "这条帖子太棒了！",
+      "postId": "795c3200-bb4c-40f2-99fc-6268f9fb4a45",
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "createdAt": "2026-03-31T07:04:19.334Z"
+    },
+    {
+      "id": "67ad5797-7369-4893-8ed4-cda85bed3774",
+      "content": "测试评论内容",
+      "postId": "5e41952b-6351-4c5b-b583-256c864e4cde",
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "createdAt": "2026-03-31T07:07:54.712Z"
+    },
+    {
+      "id": "ca1a258a-aa0c-44ce-bef8-d90b081c41d0",
+      "content": "立即测试评论",
+      "postId": "34502910-828f-4e97-8807-6f0ba7372950",
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "createdAt": "2026-03-31T07:11:01.099Z"
+    },
+    {
+      "id": "fecbf49c-e668-4036-9053-c2ccabefa985",
+      "content": "d",
+      "postId": "084bdadd-5d24-45d7-976c-b5f9fcb9a15e",
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "createdAt": "2026-03-31T07:12:17.318Z"
+    },
+    {
+      "id": "82aeb01d-9199-4afa-82c7-49d7c5a1234a",
+      "content": "终于能查到我了！",
+      "postId": "978a40f9-5df4-4979-8afa-6a6c6681ad15",
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "createdAt": "2026-03-31T07:14:33.612Z"
+    },
+    {
+      "id": "7ed53918-6fbb-4428-a067-2cca72a4bf49",
+      "content": "评论成功！",
+      "postId": "61d3ab2a-7d93-4346-82ee-a3bccc9b5f36",
+      "userId": "c1e2783f-f9dc-45aa-8003-1645176b01ab",
+      "createdAt": "2026-03-31T07:23:26.260Z"
+    },
+    {
+      "id": "8dbfbcb6-1b99-4553-9ae9-ac323e8e57d7",
+      "content": "终于好了！",
+      "postId": "735bb178-f516-46b7-8894-a517a49115fd",
+      "userId": "c1e2783f-f9dc-45aa-8003-1645176b01ab",
+      "createdAt": "2026-03-31T07:39:12.064Z"
+    },
+    {
+      "id": "476df272-1d73-4ca3-9d81-78f92ab4cfbb",
+      "content": "评论成功！",
+      "postId": "5db72231-8908-445f-8927-e58e69cadbb7",
+      "userId": "c1e2783f-f9dc-45aa-8003-1645176b01ab",
+      "createdAt": "2026-03-31T07:43:43.113Z"
+    },
+    {
+      "id": "de64bb47-429b-48ba-af4d-e9e478cdd54f",
+      "content": "E2E评论测试",
+      "postId": "d2310546-63a1-4c29-8e92-de2e96d92d00",
+      "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
+      "createdAt": "2026-03-31T08:25:34.114Z"
+    }
+  ],
+  "likes": [
+    {
+      "id": "557edad5-2f31-4a22-a7dd-08982a127ad2",
+      "postId": "e2735a67-5066-4a05-9f93-7830b550176b",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T06:28:14.821Z"
+    },
+    {
+      "id": "6dd46964-816a-480c-997b-b93435b2d89a",
+      "postId": "d2310546-63a1-4c29-8e92-de2e96d92d00",
+      "userId": "b3519ffe-6a76-436b-9f91-be59d17635e7",
+      "createdAt": "2026-03-31T06:44:40.808Z"
+    },
+    {
+      "id": "65147424-44f9-43bf-94dd-1dda65acd7e6",
+      "postId": "795c3200-bb4c-40f2-99fc-6268f9fb4a45",
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "createdAt": "2026-03-31T07:04:19.304Z"
+    },
+    {
+      "id": "9577e15b-4ccf-46dc-bc88-859005e7f27d",
+      "postId": "d2310546-63a1-4c29-8e92-de2e96d92d00",
+      "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
+      "createdAt": "2026-03-31T08:25:34.092Z"
+    }
+  ],
   "diagnoses": [
     {
       "id": "2f893a26-331b-49f2-bda4-12332d2954eb",
@@ -102,6 +589,278 @@
       "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
       "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
       "createdAt": "2026-03-31T04:21:20.182Z"
+    },
+    {
+      "id": "6a0001d6-1a3f-419c-936f-286f73dd87c3",
+      "type": "skin",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "皮肤红斑",
+        "脱毛",
+        "瘙痒"
+      ],
+      "causes": [
+        "真菌感染",
+        "过敏性皮炎",
+        "湿疹"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "真菌感染可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T06:28:14.919Z"
+    },
+    {
+      "id": "7abb1bbf-1344-4a38-a717-5012c2654680",
+      "type": "skin",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "皮肤红斑",
+        "脱毛",
+        "瘙痒"
+      ],
+      "causes": [
+        "真菌感染",
+        "过敏性皮炎",
+        "湿疹"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "真菌感染可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "7faf3bd2-079e-4a58-945f-3d7802a57ef9",
+      "createdAt": "2026-03-31T06:41:28.945Z"
+    },
+    {
+      "id": "eaee9b45-f2c4-43da-b0db-7ad1e12c78b2",
+      "type": "skin",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "皮肤红斑",
+        "脱毛",
+        "瘙痒"
+      ],
+      "causes": [
+        "真菌感染",
+        "过敏性皮炎",
+        "湿疹"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "真菌感染可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "b3519ffe-6a76-436b-9f91-be59d17635e7",
+      "createdAt": "2026-03-31T06:44:40.867Z"
+    },
+    {
+      "id": "eb66e4d2-cfb6-4b32-bac9-fcf1940d719f",
+      "type": "eye",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "眼部红肿",
+        "分泌物"
+      ],
+      "causes": [
+        "结膜炎",
+        "角膜炎"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "结膜炎可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "7f8cacee-cf19-4353-bbd6-1c82f3b3b2db",
+      "createdAt": "2026-03-31T06:45:39.497Z"
+    },
+    {
+      "id": "c9c987be-3d68-4aab-8895-a52fd21068a3",
+      "type": "skin",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "皮肤红斑",
+        "脱毛",
+        "瘙痒"
+      ],
+      "causes": [
+        "真菌感染",
+        "过敏性皮炎",
+        "湿疹"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "真菌感染可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "838ccc86-0d84-4a8c-a889-2521fbec0642",
+      "createdAt": "2026-03-31T06:48:03.075Z"
+    },
+    {
+      "id": "a3034e92-c4d1-449b-8bd7-229c6da6c0b8",
+      "type": "eye",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "眼部红肿",
+        "分泌物"
+      ],
+      "causes": [
+        "结膜炎",
+        "角膜炎"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "结膜炎可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "e83f6628-69da-4d44-8e84-0474cb5e2fea",
+      "createdAt": "2026-03-31T07:43:43.696Z"
+    },
+    {
+      "id": "6c686405-f175-4f7d-9751-3f07f9ba144e",
+      "type": "skin",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "皮肤红斑",
+        "脱毛",
+        "瘙痒"
+      ],
+      "causes": [
+        "真菌感染",
+        "过敏性皮炎",
+        "湿疹"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "真菌感染可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
+      "createdAt": "2026-03-31T08:25:34.464Z"
+    },
+    {
+      "id": "eee9aedb-b2d8-416e-a635-04121adb8968",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部脱毛，红斑，狗狗一直在抓",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快处理",
+      "summary": "背部脱毛、红斑，持续抓挠，可能为皮肤问题。",
+      "possibleCauses": [
+        "寄生虫感染",
+        "过敏性皮炎"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免狗狗抓挠"
+        ],
+        "avoid": [
+          "不要自行使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快带去兽医处检查",
+      "homeCareAdvice": "观察症状是否有加重或扩散",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "createdAt": "2026-03-31T15:12:51.579Z"
+    },
+    {
+      "id": "261cf309-70b8-4a2a-b815-d4f51d4b83ad",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "腿部红肿，脱毛",
+      "imageUrl": "https://img.alicdn.com/imgextra/i3/O1CN018IxJLL1FHLjG8P1O5_!!6000000001393-0-tbvideo.jpg",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要关注",
+      "summary": "犬腿部红肿脱毛，需进一步检查皮肤状况。",
+      "possibleCauses": [
+        "皮肤感染",
+        "过敏反应"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持患处清洁干燥",
+          "避免抓挠或摩擦"
+        ],
+        "avoid": [
+          "自行使用药物"
+        ]
+      },
+      "consultNow": "建议尽快就医检查。",
+      "homeCareAdvice": "观察症状变化，避免刺激患处。",
+      "visualAnalysis": "该犬图片显示：1）皮肤有红肿和脱毛区域；2）眼睛正常，无明显异常；3）口鼻无异常分泌物；4）行动姿态正常；5）未见明显溃疡或其他异常。建议进一步检查皮肤状况。",
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "createdAt": "2026-03-31T15:13:06.541Z"
+    },
+    {
+      "id": "e5f05425-cdc4-4fe8-8883-11ffc0736524",
+      "petType": "dog",
+      "bodyPart": "digestive",
+      "symptoms": "狗狗拉稀2天，食欲下降",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要关注",
+      "summary": "狗狗拉稀2天，食欲下降。",
+      "possibleCauses": [
+        "肠胃感染",
+        "饮食不当"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "提供干净的水",
+          "观察排便情况"
+        ],
+        "avoid": [
+          "喂食人类食物"
+        ]
+      },
+      "consultNow": "建议尽快就医检查。",
+      "homeCareAdvice": "保持宠物安静，观察症状变化。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "createdAt": "2026-03-31T15:16:49.524Z"
+    },
+    {
+      "id": "e3277e22-9c86-4a1d-b370-be7031bec887",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部大面积脱毛，红斑，狗狗剧烈瘙痒一直抓挠，持续约1周了",
+      "imageUrl": "https://img.alicdn.com/imgextra/i3/O1CN018IxJLL1FHLjG8P1O5_!!6000000001393-0-tbvideo.jpg",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "犬背部脱毛、红斑和剧烈瘙痒，持续1周。",
+      "possibleCauses": [
+        "真菌感染",
+        "寄生虫感染"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免狗狗抓挠"
+        ],
+        "avoid": [
+          "不要自行使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快带去兽医检查",
+      "homeCareAdvice": "观察症状变化并避免抓挠",
+      "visualAnalysis": "该犬图片显示：1）皮肤有红肿和脱毛区域；2）眼睛正常，无明显异常；3）口鼻无异常分泌物；4）行动姿态正常；5）整体外观未见明显溃疡或其他异常。建议进一步检查皮肤状况。",
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "createdAt": "2026-03-31T15:31:30.731Z"
     }
   ]
 }

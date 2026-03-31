@@ -120,8 +120,10 @@ const API_BASE = {
   async addComment(postId, content) { return request('POST', `/api/posts/${postId}/comments`, { content }); },
   async deletePost(postId) { return request('DELETE', `/api/posts/${postId}`); },
 
-  // AI 诊断
-  async diagnose(type, imageData) { return request('POST', '/api/diagnosis', { type, image: imageData }); },
+  // AI 诊断（新版：支持宠物类型+部位+症状+图片）
+  async diagnose({ petType, bodyPart, symptoms, imageUrl }) {
+    return request('POST', '/api/diagnosis', { petType, bodyPart, symptoms, imageUrl });
+  },
   async getDiagnosis() { return request('GET', '/api/diagnosis'); },
   async deleteDiagnosis(id) { return request('DELETE', `/api/diagnosis/${id}`); },
 

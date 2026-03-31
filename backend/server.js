@@ -4,6 +4,7 @@
  */
 
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const fs = require('fs');
 const path = require('path');
@@ -17,6 +18,10 @@ const PORT = process.env.PORT || 3000;
 const DB_DIR = path.join(__dirname, '../db');
 const DATA_FILE = path.join(DB_DIR, 'data.json');
 const UPLOADS_DIR = path.join(__dirname, '../uploads');
+
+// DashScope Qwen-VL 配置
+const DASHSCOPE_KEY = process.env.DASHSCOPE_API_KEY || 'sk-c7270ff82d62444b95b4bfbb12e85072';
+const DASHSCOPE_VL_URL = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation';
 
 // 确保目录存在
 [DB_DIR, UPLOADS_DIR].forEach(dir => {
@@ -464,11 +469,27 @@ const routes = {
     json(res, { success: true, data: DB.diagnoses.findByUser(userId) });
   },
   
-  'POST /api/diagnosis': (req, res, userId, body, params, query) => {
-    if (!body.type) return json(res, { success: false, message: '请选择诊断类型' }, 400);
-    
-    // 模拟 AI 诊断（后续可接入真实 AI）
-    const result = mockDiagnose(body.type);
+  'POST /api/diagnosis': async (req, res, userId, body, params, query) => {
+    const { petType, bodyPart, symptoms, imageUrl, type } = body;
+
+    // 新型式：petType + bodyPart（完整分诊）
+    if (petType && bodyPart) {
+      try {
+        const result = await performTriageDiagnosis({ petType, bodyPart, symptoms: symptoms || '', imageUrl });
+        const diagnosis = DB.diagnoses.create({ ...body, ...result, userId, aiUsed: 'qwen-vl-plus' });
+        return json(res, { success: true, data: diagnosis });
+      } catch (e) {
+        console.error('AI分诊失败，切换备用方案:', e.message);
+        // AI失败时使用知识库回退
+        const result = mockDiagnose(bodyPart);
+        const diagnosis = DB.diagnoses.create({ ...body, ...result, userId, aiUsed: 'mock' });
+        return json(res, { success: true, data: diagnosis, warning: 'AI服务暂时不可用，已使用本地知识库' });
+      }
+    }
+
+    // 旧型式：type（兼容现有前端）
+    if (!type) return json(res, { success: false, message: '请选择诊断类型' }, 400);
+    const result = mockDiagnose(type);
     const diagnosis = DB.diagnoses.create({ ...body, ...result, userId });
     json(res, { success: true, data: diagnosis });
   },
@@ -495,7 +516,206 @@ const routes = {
   }
 };
 
-// 模拟 AI 诊断
+// ============ DashScope Qwen-VL 图像理解 ============
+/**
+ * 调用 Qwen-VL-Plus 进行图像理解
+ * @param {string} imageUrl - 图片URL（公网可访问）
+ * @param {string} prompt - 提示词
+ * @returns {Promise<string>} - VL模型返回的文本描述
+ */
+function callQwenVL(imageUrl, prompt) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      model: 'qwen-vl-plus',
+      input: {
+        messages: [{
+          role: 'user',
+          content: `${prompt}\n图片：${imageUrl}`
+        }]
+      }
+    });
+
+    const urlObj = new URL(DASHSCOPE_VL_URL);
+    const options = {
+      hostname: urlObj.hostname,
+      path: urlObj.pathname,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${DASHSCOPE_KEY}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.output && parsed.output.choices && parsed.output.choices[0].message) {
+            const content = parsed.output.choices[0].message.content;
+            resolve(typeof content === 'string' ? content : content[0]?.text || '');
+          } else if (parsed.code) {
+            reject(new Error(`DashScope错误 ${parsed.code}: ${parsed.message}`));
+          } else {
+            reject(new Error('Qwen-VL返回格式异常: ' + data.substring(0, 200)));
+          }
+        } catch (e) {
+          reject(new Error('Qwen-VL响应解析失败: ' + e.message));
+        }
+      });
+    });
+
+    req.on('error', e => reject(new Error('Qwen-VL网络请求失败: ' + e.message)));
+    req.setTimeout(30000, () => { req.destroy(); reject(new Error('Qwen-VL请求超时')); });
+    req.write(body);
+    req.end();
+  });
+}
+
+// 加载宠物医学知识库
+function loadConditionsKB() {
+  try {
+    const kbPath = path.join(__dirname, '../knowledge/conditions.json');
+    if (fs.existsSync(kbPath)) {
+      return JSON.parse(fs.readFileSync(kbPath, 'utf8'));
+    }
+  } catch (e) {
+    console.error('加载知识库失败:', e.message);
+  }
+  return null;
+}
+
+const CONDITIONS_KB = loadConditionsKB();
+
+// 知识库检索：按宠物类型+身体部位查找相关疾病
+function searchConditions(petType, bodyPart) {
+  if (!CONDITIONS_KB || !CONDITIONS_KB.conditions) return [];
+  const conditions = CONDITIONS_KB.conditions[petType] || {};
+  const system = CONDITIONS_KB.bodySystems ? Object.entries(CONDITIONS_KB.bodySystems).find(([k, v]) =>
+    v.name.includes(bodyPart) || k.includes(bodyPart)
+  ) : null;
+  if (!system) return [];
+  const systemKey = system[0];
+  return conditions[systemKey] || [];
+}
+
+// ============ 真实 AI 分诊（Qwen-VL + 知识库）============
+async function performTriageDiagnosis({ petType, bodyPart, symptoms, imageUrl }) {
+  const petName = { dog: '犬', cat: '猫', rabbit: '兔', hamster: '仓鼠' }[petType] || '宠物';
+  const bodyPartName = CONDITIONS_KB?.bodySystems?.[bodyPart]?.name || bodyPart;
+
+  // 1. 如果有图片，先用 Qwen-VL 分析图像
+  let visualAnalysis = '';
+  if (imageUrl && imageUrl.startsWith('http')) {
+    try {
+      visualAnalysis = await callQwenVL(imageUrl,
+        `你是一个宠物医学分诊助手。请详细描述这张${petName}的图片中的异常部位，` +
+        `包括：1）是否有皮肤红肿/脱毛/溃疡；2）眼睛是否正常；3）口鼻有无异常分泌物；` +
+        `4）行动姿态是否正常；5）其他明显异常。用中文简洁回答，100字以内。`
+      );
+    } catch (e) {
+      console.error('Qwen-VL图像分析失败:', e.message);
+      visualAnalysis = '（图片分析失败，请结合文字描述判断）';
+    }
+  }
+
+  // 2. 检索知识库中的相关疾病
+  const relevantConditions = searchConditions(petType, bodyPart);
+
+  // 3. 构建提示词，让模型综合图像+症状给出分诊建议
+  const conditionsText = relevantConditions.slice(0, 3).map(c =>
+    `- ${c.name}（${(c.aliases || []).join('/')}）\n  症状：${(c.commonSymptoms || []).slice(0, 5).join('、')}\n  紧急度：${c.urgency?.level || '?'}/5（${c.urgency?.recommendation || ''}）\n  家庭护理：${(c.homeCare?.canDo || []).slice(0, 2).join('、')}`
+  ).join('\n\n');
+
+  const prompt = [
+    '你是宠物分诊助手。请根据以下信息给出分诊建议：',
+    '',
+    '**宠物信息**：' + petName,
+    '**身体部位**：' + bodyPartName,
+    '**主人描述的症状**：' + (symptoms || '无'),
+    '**图片分析结果**：' + (visualAnalysis || '无图片'),
+    '',
+    '**相关疾病参考**：',
+    conditionsText,
+    '',
+    '请按以下JSON格式输出（只输出JSON，不要其他内容）：',
+    '{',
+    '  "triage": "分诊结论（轻度/中度/重度/急危重症）",',
+    '  "severity": 1-5的数字,',
+    '  "severityLabel": "紧急程度标签",',
+    '  "summary": "综合描述（50字以内）",',
+    '  "possibleCauses": ["可能原因1","可能原因2"],',
+    '  "urgentRedFlags": ["需要立即就医的红色警示，如无则空数组"],',
+    '  "homeCare": {"canDo": ["可做的居家处理1","可做的居家处理2"], "avoid": ["应避免的行为1"]},',
+    '  "consultNow": "是否需要立即就医的建议（30字以内）",',
+    '  "homeCareAdvice": "居家观察建议（50字以内）"',
+    '}'
+  ].join('\n');
+
+  // 4. 调用 Qwen-Turbo（文字模型）生成结构化分诊报告
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      model: 'qwen-turbo',
+      input: { prompt },
+      parameters: { temperature: 0.3, top_p: 0.9, max_tokens: 800 }
+    });
+
+    const urlObj = new URL('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation');
+    const options = {
+      hostname: urlObj.hostname,
+      path: urlObj.pathname,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${DASHSCOPE_KEY}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.output && parsed.output.text) {
+            const text = parsed.output.text;
+            // 尝试解析JSON
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+              const result = JSON.parse(jsonMatch[0]);
+              resolve({
+                ...result,
+                visualAnalysis: visualAnalysis || null,
+                possibleConditions: relevantConditions.slice(0, 3).map(c => ({
+                  id: c.id, name: c.name, severity: c.severity?.level, urgency: c.urgency
+                }))
+              });
+            } else {
+              // JSON解析失败，返回文本
+              resolve({ triage: '轻度', severity: 2, severityLabel: '🟢 可居家观察', summary: text.substring(0, 200), possibleCauses: [], urgentRedFlags: [], consultNow: '建议观察', homeCareAdvice: text.substring(0, 100), visualAnalysis });
+            }
+          } else if (parsed.code) {
+            reject(new Error(`DashScope文字模型错误 ${parsed.code}: ${parsed.message}`));
+          } else {
+            reject(new Error('DashScope返回格式异常: ' + data.substring(0, 200)));
+          }
+        } catch (e) {
+          reject(new Error('解析分诊结果失败: ' + e.message + ' | 原始: ' + data.substring(0, 200)));
+        }
+      });
+    });
+
+    req.on('error', e => reject(new Error('DashScope网络请求失败: ' + e.message)));
+    req.setTimeout(30000, () => { req.destroy(); reject(new Error('DashScope请求超时')); });
+    req.write(body);
+    req.end();
+  });
+}
+
+// 模拟 AI 诊断（备用，当DashScope不可用时）
 const DIAGNOSIS_KB = {
   skin: { tags: ['皮肤红斑', '脱毛', '瘙痒'], causes: ['真菌感染', '过敏性皮炎', '湿疹'], severity: 'warning', severityLabel: '🟡 建议就医' },
   eye: { tags: ['眼部红肿', '分泌物'], causes: ['结膜炎', '角膜炎'], severity: 'warning', severityLabel: '🟡 建议就医' },
