@@ -118,7 +118,7 @@ const DB = {
   healthRecords: {
     findByPet(petId, userId, type) {
       let records = DB.data.healthRecords.filter(r => r.petId === petId && r.userId === userId);
-      if (type) records = records.filter(r => r.recordType === type);
+      if (type) records = records.filter(r => (r.recordType || r.type) === type);
       return records.sort((a, b) => new Date(b.recordDate) - new Date(a.recordDate));
     },
     create(record) {
@@ -348,7 +348,7 @@ const routes = {
     json(res, { success: true, data: DB.pets.findByUser(userId) });
   },
   
-  'POST /api/pets': (req, res, userId, body) => {
+  'POST /api/pets': (req, res, _, body) => {
     if (!body.name) return json(res, { success: false, message: '宠物名字不能为空' }, 400);
     const pet = DB.pets.create({ ...body, userId });
     json(res, { success: true, data: pet });
@@ -389,7 +389,7 @@ const routes = {
     json(res, { success: true, data: DB.reminders.findByUser(userId, query.include_done === 'true') });
   },
   
-  'POST /api/reminders': (req, res, userId, body) => {
+  'POST /api/reminders': (req, res, _, body) => {
     if (!body.petId || !body.title || !body.reminderDate) {
       return json(res, { success: false, message: '缺少必要参数' }, 400);
     }
@@ -420,7 +420,7 @@ const routes = {
     json(res, { success: true, data: result });
   },
   
-  'POST /api/posts': (req, res, userId, body) => {
+  'POST /api/posts': (req, res, _, body) => {
     if (!body.content) return json(res, { success: false, message: '内容不能为空' }, 400);
     const post = DB.posts.create({ ...body, userId });
     json(res, { success: true, data: { ...post, isLiked: false } });

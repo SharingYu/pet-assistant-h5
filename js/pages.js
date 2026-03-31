@@ -34,7 +34,7 @@ const Pages = {
     return `
       <div class="page-content home-page">
         <div class="home-header">
-          <h1>你好，铲屎官 👋</h1>
+          <h1>你好，${Store.state.user?.nickname || '铲屎官'} 👋</h1>
           <p>今天毛孩子状态如何？</p>
         </div>
         

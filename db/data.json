@@ -19,7 +19,31 @@
       "createdAt": "2026-03-31T03:47:14.292Z"
     }
   ],
-  "healthRecords": [],
+  "healthRecords": [
+    {
+      "id": "6e6afa44-1d64-49fd-b128-24cbe0724668",
+      "petId": "54d966d4-9f03-4576-95e2-5209631b6b39",
+      "type": "猫三联",
+      "date": "2026-03-15",
+      "nextDate": "2027-03-15",
+      "done": true,
+      "hospital": "宠物医院",
+      "medicine": "妙三多",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T04:14:00.263Z"
+    },
+    {
+      "id": "0487b01d-087b-442e-b911-6064af4bd1ff",
+      "petId": "54d966d4-9f03-4576-95e2-5209631b6b39",
+      "type": "猫三联",
+      "date": "2026-03-15",
+      "nextDate": "2027-03-15",
+      "done": true,
+      "recordType": "vaccine",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T04:20:18.507Z"
+    }
+  ],
   "reminders": [
     {
       "id": "3da508c6-cafa-461b-aff7-0dadcc3262f0",
@@ -56,6 +80,28 @@
       "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
       "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
       "createdAt": "2026-03-31T03:56:58.362Z"
+    },
+    {
+      "id": "54c2a529-03f1-4310-acb1-bf36d3bf8689",
+      "type": "skin",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "皮肤红斑",
+        "脱毛",
+        "瘙痒"
+      ],
+      "causes": [
+        "真菌感染",
+        "过敏性皮炎",
+        "湿疹"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "真菌感染可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T04:21:20.182Z"
     }
   ]
 }

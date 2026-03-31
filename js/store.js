@@ -45,7 +45,21 @@ const Store = {
         API_BASE.getPosts()
       ]);
       if (petsRes.success) {
-        this.state.pets = petsRes.data || [];
+        // 并行加载每只宠物的健康记录
+        const petsWithRecords = await Promise.all(
+          (petsRes.data || []).map(async pet => {
+            const [vaccineRes, dewormRes] = await Promise.all([
+              API_BASE.getHealthRecords(pet.id, 'vaccine'),
+              API_BASE.getHealthRecords(pet.id, 'deworm')
+            ]);
+            return {
+              ...pet,
+              vaccineRecords: vaccineRes.success ? (vaccineRes.data || []) : [],
+              dewormingRecords: dewormRes.success ? (dewormRes.data || []) : []
+            };
+          })
+        );
+        this.state.pets = petsWithRecords;
       }
       if (remindersRes.success) {
         // 适配后端 reminderDate → date
@@ -166,24 +180,37 @@ const Store = {
     }
   },
 
-  addHealthRecord(petId, recordType, record) {
-    // 纯本地操作，不涉及 API
-    const pet = this.state.pets.find(p => p.id === petId);
-    if (pet) {
-      const newRecord = { ...record, id: `record_${Date.now()}` };
-      if (!pet[recordType]) pet[recordType] = [];
-      pet[recordType].push(newRecord);
-      this.notify();
-      return newRecord;
+  async addHealthRecord(petId, recordType, record) {
+    // recordType: 'vaccineRecords' or 'dewormingRecords'
+    // 转换为后端用的 category: 'vaccine' or 'deworm'
+    const category = recordType.replace('Records', '');
+    try {
+      const res = await API_BASE.createHealthRecord(petId, { ...record, recordType: category });
+      if (res.success) {
+        const pet = this.state.pets.find(p => p.id === petId);
+        if (pet) {
+          if (!pet[recordType]) pet[recordType] = [];
+          pet[recordType].push(res.data);
+          this.notify();
+        }
+        return res.data;
+      }
+    } catch (e) {
+      console.error('addHealthRecord failed:', e);
     }
     return null;
   },
 
-  deleteHealthRecord(petId, recordType, recordId) {
-    const pet = this.state.pets.find(p => p.id === petId);
-    if (pet && pet[recordType]) {
-      pet[recordType] = pet[recordType].filter(r => r.id !== recordId);
-      this.notify();
+  async deleteHealthRecord(petId, recordType, recordId) {
+    try {
+      await API_BASE.deleteHealthRecord(petId, recordId);
+      const pet = this.state.pets.find(p => p.id === petId);
+      if (pet && pet[recordType]) {
+        pet[recordType] = pet[recordType].filter(r => r.id !== recordId);
+        this.notify();
+      }
+    } catch (e) {
+      console.error('deleteHealthRecord failed:', e);
     }
   },
 
