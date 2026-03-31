@@ -40,11 +40,9 @@ const DB = {
     try {
       if (fs.existsSync(DATA_FILE)) {
         this.data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-        console.log('✅ 数据库加载成功');
-      } else {
+          } else {
         this.save();
-        console.log('✅ 新建数据库文件');
-      }
+          }
     } catch (e) {
       console.error('数据库加载失败:', e);
       this.save();
@@ -226,7 +224,7 @@ const DB = {
       return DB.data.posts.length < len;
     },
     getComments(postId) {
-      return DB.data.comments.filter(c => c.postId === postId).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      return DB.data.comments.filter(c => String(c.postId) === String(postId)).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     },
     addComment(comment) {
       const newComment = { id: DB.genId(), ...comment, createdAt: new Date().toISOString() };
@@ -317,7 +315,7 @@ function json(res, data, status = 200) {
 
 const routes = {
   // 认证
-  'POST /api/auth/register': async (req, res, _, body) => {
+  'POST /api/auth/register': async (req, res, userId, body, params, query) => {
     const { username, password, nickname } = body || {};
     if (!username || !password) {
       return json(res, { success: false, message: '用户名和密码不能为空' }, 400);
@@ -335,7 +333,7 @@ const routes = {
     json(res, { success: true, data: { token, user: { id: user.id, username: user.username, nickname: user.nickname } } });
   },
   
-  'POST /api/auth/login': async (req, res, _, body) => {
+  'POST /api/auth/login': async (req, res, userId, body, params, query) => {
     const { username, password } = body || {};
     const user = DB.users.findByUsername(username);
     if (!user || !(await verifyPassword(password, user.password))) {
@@ -346,34 +344,34 @@ const routes = {
   },
   
   // 宠物
-  'GET /api/pets': (req, res, userId) => {
+  'GET /api/pets': (req, res, userId, body, params, query) => {
     json(res, { success: true, data: DB.pets.findByUser(userId) });
   },
   
-  'POST /api/pets': (req, res, userId, body) => {
+  'POST /api/pets': (req, res, userId, body, params, query) => {
     if (!body.name) return json(res, { success: false, message: '宠物名字不能为空' }, 400);
     const pet = DB.pets.create({ ...body, userId });
     json(res, { success: true, data: pet });
   },
   
-  'PUT /api/pets/:id': (req, res, userId, body, params) => {
+  'PUT /api/pets/:id': (req, res, userId, body, params, query) => {
     const pet = DB.pets.update(params.id, userId, body);
     if (!pet) return json(res, { success: false, message: '宠物不存在' }, 404);
     json(res, { success: true, data: pet });
   },
   
-  'DELETE /api/pets/:id': (req, res, userId, _, params) => {
+  'DELETE /api/pets/:id': (req, res, userId, body, params, query) => {
     DB.pets.delete(params.id, userId);
     json(res, { success: true, message: '删除成功' });
   },
   
   // 健康记录
-  'GET /api/pets/:id/records': (req, res, userId, _, params, query) => {
+  'GET /api/pets/:id/records': (req, res, userId, body, params, query) => {
     const records = DB.healthRecords.findByPet(params.id, userId, query.type);
     json(res, { success: true, data: records });
   },
   
-  'POST /api/pets/:id/records': (req, res, userId, body) => {
+  'POST /api/pets/:id/records': (req, res, userId, body, params, query) => {
     if (!DB.pets.findById(body.petId || body.petId, userId)) {
       return json(res, { success: false, message: '宠物不存在' }, 404);
     }
@@ -381,17 +379,17 @@ const routes = {
     json(res, { success: true, data: record });
   },
   
-  'DELETE /api/pets/:id/records/:recordId': (req, res, userId, _, params) => {
+  'DELETE /api/pets/:id/records/:recordId': (req, res, userId, body, params, query) => {
     DB.healthRecords.delete(params.recordId, userId);
     json(res, { success: true, message: '删除成功' });
   },
   
   // 提醒
-  'GET /api/reminders': (req, res, userId, _, query) => {
+  'GET /api/reminders': (req, res, userId, body, params, query) => {
     json(res, { success: true, data: DB.reminders.findByUser(userId, query.include_done === 'true') });
   },
   
-  'POST /api/reminders': (req, res, userId, body) => {
+  'POST /api/reminders': (req, res, userId, body, params, query) => {
     if (!body.petId || !body.title || !body.reminderDate) {
       return json(res, { success: false, message: '缺少必要参数' }, 400);
     }
@@ -399,62 +397,70 @@ const routes = {
     json(res, { success: true, data: reminder });
   },
   
-  'PUT /api/reminders/:id': (req, res, userId, body, params) => {
+  'PUT /api/reminders/:id': (req, res, userId, body, params, query) => {
     const reminder = DB.reminders.update(params.id, userId, body);
     if (!reminder) return json(res, { success: false, message: '提醒不存在' }, 404);
     json(res, { success: true, data: reminder });
   },
   
-  'POST /api/reminders/:id/complete': (req, res, userId, _, params) => {
+  'POST /api/reminders/:id/complete': (req, res, userId, body, params, query) => {
     DB.reminders.complete(params.id, userId);
     json(res, { success: true, message: '已标记完成' });
   },
   
-  'DELETE /api/reminders/:id': (req, res, userId, _, params) => {
+  'DELETE /api/reminders/:id': (req, res, userId, body, params, query) => {
     DB.reminders.delete(params.id, userId);
     json(res, { success: true, message: '删除成功' });
   },
   
   // 帖子
-  'GET /api/posts': (req, res, userId, _, query) => {
+  'GET /api/posts': (req, res, userId, body, params, query) => {
     const posts = DB.posts.findByUser(userId, query.tab);
     const result = posts.map(p => ({ ...p, isLiked: DB.posts.isLiked(p.id, userId) }));
     json(res, { success: true, data: result });
   },
   
-  'POST /api/posts': (req, res, userId, body) => {
+  'POST /api/posts': (req, res, userId, body, params, query) => {
     if (!body.content) return json(res, { success: false, message: '内容不能为空' }, 400);
     const post = DB.posts.create({ ...body, userId });
     json(res, { success: true, data: { ...post, isLiked: false } });
   },
   
-  'POST /api/posts/:id/like': (req, res, userId, _, params) => {
+  'POST /api/posts/:id/like': (req, res, userId, body, params, query) => {
     const result = DB.posts.like(params.id, userId);
     if (!result) return json(res, { success: false, message: '帖子不存在' }, 404);
     json(res, { success: true, ...result });
   },
   
-  'GET /api/posts/:id/comments': (req, res, _, params) => {
-    json(res, { success: true, data: DB.posts.getComments(params.id) });
+  'GET /api/posts/:id/comments': (req, res, userId, body, params, query) => {
+    const _params = params;
+    const _postId = _params.id;
+    const _postIdStr = String(_postId);
+    const filtered = DB.data.comments.filter(c => {
+      const cmp = String(c.postId) === _postIdStr;
+        return cmp;
+    });
+    const result = filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    json(res, { success: true, data: result });
   },
   
-  'POST /api/posts/:id/comments': (req, res, userId, body, params) => {
+  'POST /api/posts/:id/comments': (req, res, userId, body, params, query) => {
     if (!body.content) return json(res, { success: false, message: '评论内容不能为空' }, 400);
     const comment = DB.posts.addComment({ ...body, postId: params.id, userId });
     json(res, { success: true, data: comment });
   },
   
-  'DELETE /api/posts/:id': (req, res, userId, _, params) => {
+  'DELETE /api/posts/:id': (req, res, userId, body, params, query) => {
     DB.posts.delete(params.id, userId);
     json(res, { success: true, message: '删除成功' });
   },
   
   // 诊断
-  'GET /api/diagnosis': (req, res, userId) => {
+  'GET /api/diagnosis': (req, res, userId, body, params, query) => {
     json(res, { success: true, data: DB.diagnoses.findByUser(userId) });
   },
   
-  'POST /api/diagnosis': (req, res, userId, body) => {
+  'POST /api/diagnosis': (req, res, userId, body, params, query) => {
     if (!body.type) return json(res, { success: false, message: '请选择诊断类型' }, 400);
     
     // 模拟 AI 诊断（后续可接入真实 AI）
@@ -463,13 +469,13 @@ const routes = {
     json(res, { success: true, data: diagnosis });
   },
   
-  'DELETE /api/diagnosis/:id': (req, res, userId, _, params) => {
+  'DELETE /api/diagnosis/:id': (req, res, userId, body, params, query) => {
     DB.diagnoses.delete(params.id, userId);
     json(res, { success: true, message: '删除成功' });
   },
   
   // 统计
-  'GET /api/stats': (req, res, userId) => {
+  'GET /api/stats': (req, res, userId, body, params, query) => {
     const stats = {
       pets: DB.pets.findByUser(userId).length,
       reminders: DB.reminders.findByUser(userId).length,
@@ -480,7 +486,7 @@ const routes = {
   },
   
   // 健康检查
-  'GET /api/health': (req, res) => {
+  'GET /api/health': (req, res, userId, body, params, query) => {
     json(res, { status: 'ok', timestamp: new Date().toISOString() });
   }
 };
@@ -539,39 +545,63 @@ const server = http.createServer((req, res) => {
     let params = {};
     
     for (const [route, h] of Object.entries(routes)) {
+      params = {};
       const [method, path] = route.split(' ');
       if (method !== req.method) continue;
       
       const pathParts = path.split('/');
       const reqParts = pathname.split('/');
       
-      if (pathParts.length !== reqParts.length) continue;
+      if (pathParts.length !== reqParts.length) {
+            continue;
+      }
       
       let match = true;
       params = {};
       
       for (let i = 1; i < pathParts.length; i++) {
         if (pathParts[i].startsWith(':')) {
-          params[pathParts[i].slice(1)] = reqParts[i];
+          const k = pathParts[i].slice(1);
+          const v = reqParts[i];
+                params[k] = v;
         } else if (pathParts[i] !== reqParts[i]) {
-          match = false;
+                match = false;
           break;
         }
       }
       
       if (match) {
-        handler = h;
+            handler = h;
         break;
       }
     }
     
     if (handler) {
-      Promise.resolve()
-        .then(() => handler(req, res, user?.userId, parsedBody, params, query))
-        .catch(e => {
-          console.error('路由处理错误:', e);
-          json(res, { success: false, message: '服务器错误' }, 500);
-        });
+      // 路由参数固定传5个：userId, body, params, query
+      const _userId = user?.userId;
+      const _body = parsedBody;
+      const _params = params;
+      const _query = query;
+      
+      const callHandler = (h) => {
+        // 尝试多种签名
+        if (h.length >= 5) {
+          return h(req, res, _userId, _body, _params, _query);
+        } else if (h.length === 4) {
+          return h(req, res, _userId, _body, _params);
+        } else if (h.length === 3) {
+          return h(req, res, _userId, _body);
+        } else {
+          return h(req, res);
+        }
+      };
+      
+      try {
+        const result = callHandler(handler);
+        if (result && typeof result.then === 'function') {
+          result.catch(e => { console.error('路由处理错误:', e); json(res, { success: false, message: '服务器错误' }, 500); });
+        }
+      } catch (e) { console.error('路由处理错误:', e); json(res, { success: false, message: '服务器错误' }, 500); }
     } else {
       json(res, { success: false, message: '接口不存在' }, 404);
     }
