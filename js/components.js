@@ -55,6 +55,12 @@ const TabBar = {
       badge.textContent = count;
       badge.style.display = count > 0 ? 'block' : 'none';
     }
+  },
+  hide() {
+    document.getElementById('tabbar').style.display = 'none';
+  },
+  show() {
+    document.getElementById('tabbar').style.display = '';
   }
 };
 
@@ -93,15 +99,23 @@ function renderDiagnosisTypeCard(type, selected, onClick) {
 
 // 提醒项
 function renderReminderItem(reminder, onDone, onDelete) {
+  // 兼容旧格式（localStorage）和新格式（API）
+  const typeInfo = API.reminderTypes.find(t => t.id === reminder.type) || { icon: '📌', color: '#F5222D', name: '其他' };
+  const icon = reminder.icon || typeInfo.icon;
+  const color = reminder.color || typeInfo.color;
+  const reminderTypeName = reminder.reminderTypeName || typeInfo.name;
+  const displayDate = (reminder.reminderDate || reminder.date || '').slice(0, 10);
+  const petName = reminder.petName || reminder.pet?.name || '宠物';
+  
   return `
     <div class="reminder-item" data-id="${reminder.id}">
-      <div class="reminder-icon" style="background: ${reminder.color}20;">
-        <span>${reminder.icon}</span>
+      <div class="reminder-icon" style="background: ${color}20;">
+        <span>${icon}</span>
       </div>
       <div class="reminder-info">
         <div class="reminder-title">${reminder.title}</div>
-        <div class="reminder-pet">🐾 ${reminder.petName} · ${reminder.reminderTypeName}</div>
-        <div class="reminder-date">📅 ${reminder.date}</div>
+        <div class="reminder-pet">🐾 ${petName} · ${reminderTypeName}</div>
+        <div class="reminder-date">📅 ${displayDate}</div>
       </div>
       <div class="reminder-actions">
         <button class="reminder-btn done" data-action="done" title="完成">✓</button>

@@ -1,12 +1,12 @@
 /**
- * API - 模拟 API 服务 + AI 集成接口
- * 支持 Mock 数据和真实 AI API 扩展
+ * api.js - 业务接口层
+ * 调用 http.js 中的 API_BASE 真实请求
+ * 保留：知识库配置、提示词、图片处理
  */
 
 const API = {
   // ========== 配置 ==========
   config: {
-    // 真实 AI API 配置（未来可开启）
     aiProvider: 'mock', // 'mock' | 'openai' | 'qwen' | 'deepseek'
     apiKeys: {
       qwen: '',
@@ -14,8 +14,8 @@ const API = {
       openai: ''
     }
   },
-  
-  // ========== 诊断知识库 ==========
+
+  // ========== 诊断知识库（静态配置，非网络） ==========
   diagnosisKB: {
     skin: {
       tags: ['皮肤红斑', '脱毛', '瘙痒', '皮屑', '红包/疹子'],
@@ -66,8 +66,8 @@ const API = {
       medicine: ['耳漂', '耳肤灵（需兽医推荐）']
     }
   },
-  
-  // ========== 话题标签 ==========
+
+  // ========== 话题标签（静态配置） ==========
   topics: [
     { id: 'daily', name: '#晒宠#', desc: '分享日常', icon: '📸' },
     { id: 'health', name: '#宠物健康#', desc: '健康讨论', icon: '💊' },
@@ -78,8 +78,8 @@ const API = {
     { id: 'travel', name: '#携宠出行#', desc: '旅行分享', icon: '✈️' },
     { id: 'skill', name: '#技能学习#', desc: '技能训练', icon: '🎓' }
   ],
-  
-  // ========== 提醒类型 ==========
+
+  // ========== 提醒类型（静态配置） ==========
   reminderTypes: [
     { id: 'vaccine', icon: '💉', color: '#52C41A', name: '疫苗' },
     { id: 'deworm', icon: '💊', color: '#722ED1', name: '驱虫' },
@@ -88,8 +88,8 @@ const API = {
     { id: 'medicine', icon: '💊', color: '#FAAD14', name: '用药' },
     { id: 'other', icon: '📌', color: '#F5222D', name: '其他' }
   ],
-  
-  // ========== 宠物类型 ==========
+
+  // ========== 宠物类型（静态配置） ==========
   petTypes: [
     { id: 'cat', name: '🐱 猫咪', emoji: '🐱' },
     { id: 'dog', name: '🐶 狗狗', emoji: '🐶' },
@@ -97,22 +97,25 @@ const API = {
     { id: 'hamster', name: '🐹 仓鼠', emoji: '🐹' },
     { id: 'other', name: '🐾 其他', emoji: '🐾' }
   ],
-  
-  // ========== AI 诊断 ==========
+
+  // ========== 诊断方法（调用后端，fallback本地mock） ==========
   async diagnose(type, imageData) {
-    // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
-    
+    try {
+      // 优先调用后端 API
+      const result = await API_BASE.diagnose(type, imageData);
+      if (result.success) {
+        return result;
+      }
+    } catch (e) {
+      // 网络失败时fallback到本地mock
+    }
+
+    // Fallback: 本地mock逻辑
     const kb = this.diagnosisKB[type] || this.diagnosisKB.skin;
-    
-    // 随机选择标签和原因
     const tagCount = Math.floor(Math.random() * 2) + 1;
     const tags = [...kb.tags].sort(() => Math.random() - 0.5).slice(0, tagCount);
-    
     const causeCount = Math.floor(Math.random() * 2) + 1;
     const causes = [...kb.causes].sort(() => Math.random() - 0.5).slice(0, causeCount);
-    
-    // 随机严重程度
     const roll = Math.random();
     let severity;
     if (roll > 0.9) {
@@ -122,7 +125,7 @@ const API = {
     } else {
       severity = { level: 'normal', label: '🟢 居家观察', class: 'success' };
     }
-    
+
     return {
       success: true,
       data: {
@@ -142,7 +145,7 @@ const API = {
       }
     };
   },
-  
+
   // 生成 AI 建议
   generateAIAdvice(type, tags, severity) {
     const adviceTemplates = {
@@ -155,11 +158,9 @@ const API = {
     };
     return adviceTemplates[type] || '建议持续观察，如有异常及时就医。';
   },
-  
-  // ========== 获取相似案例 ==========
+
+  // ========== 相似案例（暂时保留本地mock） ==========
   async getSimilarCases(type) {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
     const cases = {
       skin: [
         { author: '铲屎官小李', petName: '橘子', petType: 'cat', content: '我家猫最近掉毛严重，皮肤发红，试了碘伏和皮特芬效果一般...后来发现是猫粮过敏，换了低敏粮好了！', likes: 234, from: '小红书', tag: '已解决', solved: true },
@@ -167,17 +168,14 @@ const API = {
         { author: '新手养狗人', petName: '旺财', petType: 'dog', content: '狗狗皮肤病千万别拖！我就是拖了一周，结果变成了全身性的...花了2个月才治好', likes: 312, from: '社区', tag: '教训', solved: false }
       ],
       eye: [
-        { author: '喵星人日记', petName: '咪咪', petType: 'cat', content: '猫咪眼睛发红流泪以为是上火，检查发现是衣原体感染，吃了多西环素一周好了。', likes: 156, from: '小红书', tag: '已解决', solved: true },
-        { author: '养猫新手', petName: '团子', petType: 'cat', content: '结膜炎真的要注意！我家用的是宠物专用眼药水，一周就好了。', likes: 98, from: '社区', tag: '经验分享', solved: true }
+        { author: '喵星人日记', petName: '咪咪', petType: 'cat', content: '猫咪眼睛发红流泪以为是上火，检查发现是衣原体感染，吃了多西环素一周好了。', likes: 156, from: '小红书', tag: '已解决', solved: true }
       ],
       stool: [
         { author: '养宠日记本', petName: '年糕', petType: 'cat', content: '换粮导致的软便，拉了3天，精神很好所以没去医院，喂了益生菌调整好了。建议大家换粮要循序渐进！', likes: 312, from: '小红书', tag: '经验分享', solved: true },
-        { author: '新手铲屎官', petName: '小白', petType: 'dog', content: '狗狗拉血便吓死我了，结果是吃了鸡骨头划伤肠道...以后再也不乱喂了！', likes: 456, from: '小红书', tag: '教训', solved: false },
-        { author: '猫奴日常', petName: '布丁', petType: 'cat', content: '猫咪呕吐加拉稀自救经历：断食12小时后喂益生菌，第二天就好了。记得排除毛球可能！', likes: 234, from: '社区', tag: '已解决', solved: true }
+        { author: '新手铲屎官', petName: '小白', petType: 'dog', content: '狗狗拉血便吓死我了，结果是吃了鸡骨头划伤肠道...以后再也不乱喂了！', likes: 456, from: '小红书', tag: '教训', solved: false }
       ],
       behavior: [
-        { author: '毛孩子家长', petName: '大黄', petType: 'dog', content: '老年犬突然不爱动了，以为是天气热，检查发现是心脏问题...提醒大家定期体检很重要！', likes: 278, from: '小红书', tag: '提醒', solved: false },
-        { author: '宠物行为师', petName: '奶茶', petType: 'cat', content: '猫咪突然躲起来不吃东西？可能是应激了。我家的用了费洛蒙扩散器，两天就恢复了。', likes: 189, from: '社区', tag: '经验分享', solved: true }
+        { author: '毛孩子家长', petName: '大黄', petType: 'dog', content: '老年犬突然不爱动了，以为是天气热，检查发现是心脏问题...提醒大家定期体检很重要！', likes: 278, from: '小红书', tag: '提醒', solved: false }
       ],
       mouth: [
         { author: '口腔健康宠物', petName: '团子', petType: 'cat', content: '猫咪牙结石导致牙龈发炎，洗牙后配合口腔凝胶，现在吃嘛嘛香！', likes: 198, from: '小红书', tag: '已解决', solved: true }
@@ -186,16 +184,14 @@ const API = {
         { author: '养猫日记', petName: '布丁', petType: 'cat', content: '猫咪老是挠耳朵，甩头，检查发现是耳螨，用了大宠爱配合耳漂，一周见效！', likes: 267, from: '小红书', tag: '已解决', solved: true }
       ]
     };
-    
     return cases[type] || cases.skin;
   },
-  
-  // ========== 图片处理 ==========
+
+  // ========== 图片处理（纯前端） ==========
   async uploadImage(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        // 压缩图片
         this.compressImage(e.target.result, (compressedData) => {
           resolve({
             success: true,
@@ -210,8 +206,7 @@ const API = {
       reader.readAsDataURL(file);
     });
   },
-  
-  // 简单图片压缩（使用 canvas）
+
   compressImage(dataUrl, callback) {
     const img = new Image();
     img.onload = () => {
@@ -226,7 +221,7 @@ const API = {
     };
     img.src = dataUrl;
   },
-  
+
   // ========== 工具方法 ==========
   getTypeName(type) {
     const names = {
@@ -235,14 +230,14 @@ const API = {
     };
     return names[type] || '未知问题';
   },
-  
+
   getTypeIcon(type) {
     const icons = {
       skin: '🔴', eye: '👁️', stool: '💩', behavior: '🌀', mouth: '🦷', ear: '👂'
     };
     return icons[type] || '❓';
   },
-  
+
   getUploadTips(type) {
     const tips = {
       skin: '• 皮肤问题：拍摄患处全景+特写，保持光线充足\n• 优先拍摄能看到病变范围的照片',

@@ -11,7 +11,7 @@ const Pages = {
     const weekLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     
     const upcomingReminders = reminders
-      .filter(r => !r.done && new Date(r.date) >= now && new Date(r.date) <= weekLater)
+      .filter(r => !r.done && new Date(r.reminderDate || r.date) >= now && new Date(r.reminderDate || r.date) <= weekLater)
       .slice(0, 3);
     
     const petsHtml = pets.length > 0
@@ -68,18 +68,23 @@ const Pages = {
             <span class="section-more" onclick="App.navigateTo('reminders')">查看全部</span>
           </div>
           <div class="reminders-preview" style="padding: 0 16px;">
-            ${upcomingReminders.map(r => `
+            ${upcomingReminders.map(r => {
+              const typeInfo = API.reminderTypes.find(t => t.id === r.type) || { icon: '📌', color: '#F5222D' };
+              const icon = r.icon || typeInfo.icon;
+              const color = r.color || typeInfo.color;
+              const petName = r.petName || r.pet?.name || '宠物';
+              return `
               <div class="reminder-preview-item" data-id="${r.id}">
-                <div class="reminder-icon" style="background: ${r.color}20;">
-                  <span>${r.icon}</span>
+                <div class="reminder-icon" style="background: ${color}20;">
+                  <span>${icon}</span>
                 </div>
                 <div class="reminder-info">
                   <div class="reminder-title">${r.title}</div>
-                  <div class="reminder-pet">🐾 ${r.petName}</div>
+                  <div class="reminder-pet">🐾 ${petName}</div>
                 </div>
                 <span class="tag tag-orange">待处理</span>
-              </div>
-            `).join('')}
+              </div>`;
+            }).join('')}
           </div>
         ` : ''}
         
@@ -387,10 +392,10 @@ const Pages = {
     const active = reminders.filter(r => !r.done);
     const completed = reminders.filter(r => r.done);
     
-    const todayReminders = active.filter(r => r.date === today);
-    const tomorrowReminders = active.filter(r => r.date === tomorrow);
-    const weekReminders = active.filter(r => r.date > tomorrow && r.date <= weekLater);
-    const laterReminders = active.filter(r => r.date > weekLater);
+    const todayReminders = active.filter(r => (r.reminderDate || r.date).slice(0,10) === today);
+    const tomorrowReminders = active.filter(r => (r.reminderDate || r.date).slice(0,10) === tomorrow);
+    const weekReminders = active.filter(r => { const d = r.reminderDate || r.date; return d > tomorrow && d <= weekLater; });
+    const laterReminders = active.filter(r => (r.reminderDate || r.date) > weekLater);
     
     const pendingCount = active.length;
     
@@ -442,17 +447,21 @@ const Pages = {
           
           ${completed.length > 0 ? `
             <div class="reminder-group-title" style="margin-top: 24px; color: var(--text-light);">✅ 已完成</div>
-            ${completed.slice(0, 5).map(r => `
+            ${completed.slice(0, 5).map(r => {
+              const typeInfo = API.reminderTypes.find(t => t.id === r.type) || { icon: '📌' };
+              const icon = r.icon || typeInfo.icon;
+              const petName = r.petName || r.pet?.name || '宠物';
+              return `
               <div class="reminder-item" style="opacity: 0.6;">
                 <div class="reminder-icon" style="background: var(--bg);">
-                  <span style="opacity: 0.5;">${r.icon}</span>
+                  <span style="opacity: 0.5;">${icon}</span>
                 </div>
                 <div class="reminder-info">
                   <div class="reminder-title" style="text-decoration: line-through;">${r.title}</div>
-                  <div class="reminder-pet">🐾 ${r.petName}</div>
+                  <div class="reminder-pet">🐾 ${petName}</div>
                 </div>
-              </div>
-            `).join('')}
+              </div>`;
+            }).join('')}
           ` : ''}
         </div>
         
@@ -564,5 +573,266 @@ const Pages = {
         </div>
       </div>
     `;
+  },
+
+// ========== 认证页 ==========
+authState: {
+  mode: 'login', // 'login' | 'register'
+  loading: false,
+  error: null
+},
+
+renderAuth() {
+  const s = this.authState;
+  const isLogin = s.mode === 'login';
+  
+  return `
+    <div class="auth-page">
+      <div class="auth-header">
+        <div class="auth-logo">🐾</div>
+        <h1 class="auth-title">毛孩子健康助手</h1>
+        <p class="auth-subtitle">登录后可同步宠物数据到云端</p>
+      </div>
+      
+      <div class="auth-tabs">
+        <button class="auth-tab ${isLogin ? 'active' : ''}" onclick="Pages.switchAuthTab('login')">
+          登录
+        </button>
+        <button class="auth-tab ${!isLogin ? 'active' : ''}" onclick="Pages.switchAuthTab('register')">
+          注册
+        </button>
+      </div>
+      
+      <div class="auth-form">
+        ${s.error ? `<div class="auth-error">${s.error}</div>` : ''}
+        
+        <div class="form-group">
+          <label class="form-label">用户名</label>
+          <input 
+            type="text" 
+            id="authUsername" 
+            class="form-input" 
+            placeholder="请输入用户名"
+            autocomplete="username"
+          />
+        </div>
+        
+        ${!isLogin ? `
+          <div class="form-group">
+            <label class="form-label">昵称</label>
+            <input 
+              type="text" 
+              id="authNickname" 
+              class="form-input" 
+              placeholder="请输入昵称（选填）"
+              autocomplete="nickname"
+            />
+          </div>
+        ` : ''}
+        
+        <div class="form-group">
+          <label class="form-label">密码</label>
+          <input 
+            type="password" 
+            id="authPassword" 
+            class="form-input" 
+            placeholder="请输入密码"
+            autocomplete="${isLogin ? 'current-password' : 'new-password'}"
+          />
+        </div>
+        
+        <button 
+          class="btn btn-primary btn-block" 
+          id="authSubmitBtn"
+          onclick="Pages.submitAuth()"
+          ${s.loading ? 'disabled' : ''}
+        >
+          ${s.loading ? '处理中...' : (isLogin ? '登录' : '注册')}
+        </button>
+      </div>
+      
+      ${isLogin ? `
+        <div class="auth-footer">
+          <p>还没有账号？<a href="#" onclick="Pages.switchAuthTab('register'); return false;">立即注册</a></p>
+        </div>
+      ` : `
+        <div class="auth-footer">
+          <p>已有账号？<a href="#" onclick="Pages.switchAuthTab('login'); return false;">立即登录</a></p>
+        </div>
+      `}
+    </div>
+    
+    <style>
+      .auth-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #FFF2E8 0%, #F5F0FF 100%);
+        padding: 48px 24px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .auth-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+      .auth-logo {
+        font-size: 64px;
+        margin-bottom: 16px;
+      }
+      .auth-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0 0 8px;
+      }
+      .auth-subtitle {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin: 0;
+      }
+      .auth-tabs {
+        display: flex;
+        background: var(--card);
+        border-radius: var(--radius-lg);
+        padding: 4px;
+        margin-bottom: 24px;
+        width: 100%;
+        max-width: 320px;
+        box-shadow: var(--shadow-sm);
+      }
+      .auth-tab {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        background: transparent;
+        border-radius: var(--radius-md);
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all var(--transition-base);
+      }
+      .auth-tab.active {
+        background: var(--primary);
+        color: white;
+      }
+      .auth-form {
+        width: 100%;
+        max-width: 320px;
+        background: var(--card);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-md);
+      }
+      .auth-error {
+        background: var(--danger-light);
+        color: var(--danger);
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        margin-bottom: 16px;
+        font-size: 14px;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .form-input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        transition: border-color var(--transition-fast);
+        box-sizing: border-box;
+      }
+      .form-input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+      .btn-block {
+        width: 100%;
+        margin-top: 8px;
+      }
+      .auth-footer {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 14px;
+        color: var(--text-secondary);
+      }
+      .auth-footer a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+    </style>
+  `;
+},
+
+switchAuthTab(mode) {
+  this.authState.mode = mode;
+  this.authState.error = null;
+  const container = document.getElementById('pagesContainer');
+  if (container) container.innerHTML = this.renderAuth();
+},
+
+async submitAuth() {
+  const s = this.authState;
+  if (s.loading) return;
+  
+  const username = document.getElementById('authUsername').value.trim();
+  const password = document.getElementById('authPassword').value.trim();
+  const nickname = document.getElementById('authNickname')?.value.trim() || username;
+  
+  if (!username || !password) {
+    s.error = '请填写用户名和密码';
+    const container = document.getElementById('pagesContainer');
+    if (container) container.innerHTML = this.renderAuth();
+    return;
   }
+  
+  if (password.length < 6) {
+    s.error = '密码至少6位';
+    const container = document.getElementById('pagesContainer');
+    if (container) container.innerHTML = this.renderAuth();
+    return;
+  }
+  
+  s.loading = true;
+  s.error = null;
+  const container = document.getElementById('pagesContainer');
+  if (container) container.innerHTML = this.renderAuth();
+  
+  try {
+    let res;
+    if (s.mode === 'login') {
+      res = await API_BASE.login(username, password);
+    } else {
+      res = await API_BASE.register(username, password, nickname);
+    }
+    
+    if (res.success && res.data.token) {
+      TokenManager.setToken(res.data.token);
+      TokenManager.setUser(res.data.user);
+      Store.setUser(res.data.user);
+      App.hideTabBar();
+      App.navigateTo('home');
+    } else {
+      s.error = res.message || '操作失败，请重试';
+      s.loading = false;
+      container.innerHTML = this.renderAuth();
+    }
+  } catch (e) {
+    s.error = '网络异常，请检查网络连接';
+    s.loading = false;
+    container.innerHTML = this.renderAuth();
+  }
+},
+
 };

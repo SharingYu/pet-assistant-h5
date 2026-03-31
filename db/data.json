@@ -1,0 +1,61 @@
+{
+  "users": [
+    {
+      "id": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "username": "test001",
+      "password": "29c40ba0eeb4bd77eac80f1316420cb96070a40161582850e422c3621b5c1a65",
+      "nickname": "test001",
+      "createdAt": "2026-03-31T03:46:38.431Z"
+    }
+  ],
+  "pets": [
+    {
+      "id": "54d966d4-9f03-4576-95e2-5209631b6b39",
+      "name": "豆豆",
+      "type": "dog",
+      "breed": "柴犬",
+      "age": 3,
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T03:47:14.292Z"
+    }
+  ],
+  "healthRecords": [],
+  "reminders": [
+    {
+      "id": "3da508c6-cafa-461b-aff7-0dadcc3262f0",
+      "petId": "54d966d4-9f03-4576-95e2-5209631b6b39",
+      "title": "打疫苗",
+      "reminderDate": "2026-04-05T10:00:00Z",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "done": false,
+      "createdAt": "2026-03-31T03:47:34.866Z"
+    }
+  ],
+  "posts": [],
+  "comments": [],
+  "likes": [],
+  "diagnoses": [
+    {
+      "id": "2f893a26-331b-49f2-bda4-12332d2954eb",
+      "type": "skin",
+      "image": "",
+      "severity": "warning",
+      "severityLabel": "🟡 建议就医",
+      "tags": [
+        "皮肤红斑",
+        "脱毛",
+        "瘙痒"
+      ],
+      "causes": [
+        "真菌感染",
+        "过敏性皮炎",
+        "湿疹"
+      ],
+      "suggestion": "建议持续观察，如有异常及时就医。",
+      "aiAdvice": "真菌感染可能导致以上症状，请密切关注。",
+      "disclaimer": "本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。",
+      "userId": "75222b56-4e21-4f09-97d3-23adc191674c",
+      "createdAt": "2026-03-31T03:56:58.362Z"
+    }
+  ]
+}

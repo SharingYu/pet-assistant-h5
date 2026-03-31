@@ -316,8 +316,8 @@ function json(res, data, status = 200) {
 
 const routes = {
   // 认证
-  'POST /api/auth/register': (req, res, body) => {
-    const { username, password, nickname } = body;
+  'POST /api/auth/register': (req, res, _, body) => {
+    const { username, password, nickname } = body || {};
     if (!username || !password) {
       return json(res, { success: false, message: '用户名和密码不能为空' }, 400);
     }
@@ -333,8 +333,8 @@ const routes = {
     json(res, { success: true, data: { token, user: { id: user.id, username: user.username, nickname: user.nickname } } });
   },
   
-  'POST /api/auth/login': (req, res, body) => {
-    const { username, password } = body;
+  'POST /api/auth/login': (req, res, _, body) => {
+    const { username, password } = body || {};
     const user = DB.users.findByUsername(username);
     if (!user || !verifyPassword(password, user.password)) {
       return json(res, { success: false, message: '用户名或密码错误' }, 401);

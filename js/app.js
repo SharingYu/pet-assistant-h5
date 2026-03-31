@@ -7,21 +7,47 @@ const App = {
   currentPetId: null,
   
   init() {
+    // 注册 Token 过期监听
+    window.addEventListener('auth:expired', () => {
+      Toast.error('登录已过期，请重新登录');
+      this.logout();
+    });
+    
     TabBar.init();
     Store.subscribe(() => this.onStateChange());
     this.bindNavigation();
-    this.navigateTo('home');
-    TabBar.updateBadge();
+    
+    // 根据登录态决定首页
+    if (TokenManager.isLoggedIn()) {
+      Store.setUser(TokenManager.getUser());
+      Store.loadFromAPI().then(() => {
+        this.navigateTo('home');
+        TabBar.updateBadge();
+      });
+    } else {
+      this.navigateTo('auth');
+      TabBar.hide();
+    }
+    
     console.log('App initialized');
   },
   
   navigateTo(tab, data = null) {
+    // 未登录状态只能访问 auth 页
+    if (tab !== 'auth' && !TokenManager.isLoggedIn()) {
+      this.navigateTo('auth');
+      return;
+    }
+    
     this.currentTab = tab;
-    TabBar.setActive(tab);
+    if (tab !== 'auth') TabBar.setActive(tab);
     
     const container = document.getElementById('pagesContainer');
     
     switch (tab) {
+      case 'auth':
+        container.innerHTML = Pages.renderAuth();
+        break;
       case 'home':
         container.innerHTML = Pages.renderHome();
         this.bindHomeEvents();
@@ -272,7 +298,7 @@ const App = {
         petName: pet?.name || '',
         type: selectedType?.dataset.type || 'other',
         title: formData.get('title'),
-        date: formData.get('date'),
+        reminderDate: formData.get('date'),
         icon: type.icon,
         color: type.color,
         reminderTypeName: type.name
@@ -375,6 +401,21 @@ const App = {
   showDiagnosisHistory() {
     const container = document.getElementById('pagesContainer');
     container.innerHTML = renderDiagnosisHistory();
+  },
+  
+  // ========== 认证 ==========
+  logout() {
+    Store.logout();
+    TabBar.hide();
+    this.navigateTo('auth');
+  },
+  
+  hideTabBar() {
+    document.getElementById('tabbar').style.display = 'none';
+  },
+  
+  showTabBar() {
+    document.getElementById('tabbar').style.display = '';
   },
   
   // ========== 图片上传 ==========
