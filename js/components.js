@@ -137,8 +137,8 @@ function renderReminderItem(reminder, onDone, onDelete) {
       </div>
       <div class="reminder-info">
         <div class="reminder-title">${reminder.title}</div>
-        <div class="reminder-pet">🐾 ${petName} · ${reminderTypeName}</div>
-        <div class="reminder-date">📅 ${displayDate}</div>
+        <div class="reminder-pet"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><ellipse cx="12" cy="14" rx="5" ry="4"/><circle cx="8" cy="9" r="2"/><circle cx="16" cy="9" r="2"/><circle cx="6" cy="13" r="1.5"/><circle cx="18" cy="13" r="1.5"/></svg> ${petName} · ${reminderTypeName}</div>
+        <div class="reminder-date"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="vertical-align:middle;margin-right:2px;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${displayDate}</div>
       </div>
       <div class="reminder-actions">
         <button class="reminder-btn done" data-action="done" title="完成">✓</button>
@@ -158,7 +158,7 @@ function renderPostCard(post) {
   const aiReplyHtml = post.aiReply
     ? `<div class="post-ai-reply">
         <div class="post-ai-reply-header">
-          <span class="post-ai-badge">🐱 AI回复</span>
+          <span class="post-ai-badge" style="background: linear-gradient(135deg, #FF9500, #FF6B00); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">🤖 AI回复</span>
           <span>${post.author.petName}</span>
         </div>
         <div class="post-ai-text">${post.aiReply}</div>
@@ -207,7 +207,7 @@ function renderDiagnosisHistoryCard(diagnosis) {
     <div class="post-card" data-id="${diagnosis.id}" style="margin-bottom: 12px;">
       <div class="post-header">
         <div class="post-avatar" style="background: ${color}20; color: ${color};">
-          ${diagnosis.typeIcon || '🔬'}
+          ${diagnosis.typeIcon || '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg>'}
         </div>
         <div class="post-author-info">
           <div>
@@ -454,16 +454,20 @@ function renderCommentPanel(postId) {
 // 诊断历史页面
 function renderDiagnosisHistory() {
   const history = Store.getState('diagnosisHistory');
-  
+
   return `
     <div class="page-content" style="padding: 16px; padding-bottom: 80px;">
-      <div class="section-header" style="padding: 0; margin-bottom: 16px;">
-        <h2 style="font-size: 18px;">🔬 诊断历史</h2>
+      <div style="display: flex; align-items: center; margin-bottom: 16px;">
+        <button onclick="App.navigateTo('home')" style="width: 32px; height: 32px; border-radius: 8px; background: #f5f5f5; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
+        </button>
+        <h2 style="flex: 1; text-align: center; font-size: 16px; font-weight: 600; color: #333; margin: 0;">诊断历史</h2>
+        <div style="width: 32px;"></div>
       </div>
-      
+
       ${history.length > 0
         ? history.map(d => renderDiagnosisHistoryCard(d)).join('')
-        : renderEmptyState('🔬', '暂无诊断记录', '使用 AI 诊断功能后会在这里显示历史记录', null, null)
+        : renderEmptyState('<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5" style="margin-bottom:8px;"><use href="#icon-stethoscope"/></svg>', '暂无诊断记录', '使用 AI 诊断功能后会在这里显示历史记录', null, null)
       }
     </div>
   `;

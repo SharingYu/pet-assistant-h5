@@ -552,8 +552,12 @@ const Pages = {
       <div class="page-content community-page">
         <div class="community-header">
           <div class="community-tabs">
-            ${['🔥 热门', '✨ 最新', '❤️ 关注'].map((tab, i) => `
-              <span class="comm-tab ${i === 0 ? 'active' : ''}">${tab}</span>
+            ${[
+              { icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>', label: '热门' },
+              { icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>', label: '最新' },
+              { icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>', label: '关注' }
+            ].map((tab, i) => `
+              <span class="comm-tab ${i === 0 ? 'active' : ''}" style="display: flex; align-items: center; gap: 4px;">${tab.icon}${tab.label}</span>
             `).join('')}
           </div>
           <button class="new-post-btn" onclick="App.showNewPostModal()">+ 发帖</button>
@@ -604,10 +608,10 @@ const Pages = {
         <div class="reminders-header">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-              <h1>⏰ 健康提醒</h1>
+              <h1><svg class="icon-20" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 6px; color: #FF9500;"><use href="#icon-reminder"/></svg>健康提醒</h1>
               <p style="opacity: 0.85; margin-top: 4px;">守护毛孩子健康的每一步</p>
             </div>
-            <button class="profile-edit-btn" onclick="App.showAddReminderModal()">+ 添加</button>
+            <button onclick="App.showAddReminderModal()" style="background: linear-gradient(135deg, #FF9500, #FF6B00); color: white; border: none; border-radius: 20px; width: 36px; height: 36px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(255,149,0,0.3);">+</button>
           </div>
         </div>
         
@@ -634,7 +638,7 @@ const Pages = {
               ${renderGroup('本周', weekReminders)}
               ${renderGroup('更早', laterReminders)}
             `
-            : renderEmptyState('⏰', '暂无提醒', '添加疫苗、驱虫等健康提醒', '添加提醒', 'App.showAddReminderModal()')
+            : renderEmptyState('<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5" style="margin-bottom:8px;"><use href="#icon-reminder"/></svg>', '暂无提醒', '添加疫苗、驱虫等健康提醒', '添加提醒', 'App.showAddReminderModal()')
           }
           
           ${completed.length > 0 ? `
@@ -666,24 +670,35 @@ const Pages = {
   renderPetProfile(petId) {
     const pets = Store.getState('pets');
     const pet = pets.find(p => p.id === petId);
-    
+
     if (!pet) {
       return `<div class="page-content"><div class="empty-state">宠物不存在</div></div>`;
     }
-    
-    const emoji = API.petTypes.find(t => t.id === pet.type)?.emoji || '🐾';
-    const avatar = pet.avatar 
-      ? `<img src="${pet.avatar}" alt="${pet.name}">` 
-      : `<span style="font-size: 48px;">${emoji}</span>`;
-    
+
+    const petType = API.petTypes.find(t => t.id === pet.type);
+    const avatar = pet.avatar
+      ? `<img src="${pet.avatar}" alt="${pet.name}">`
+      : `<svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;"><use href="#${petType?.icon || 'icon-logo'}"/></svg>`;
+
     const genderText = pet.gender === 'male' ? '♂ 公' : pet.gender === 'female' ? '♀ 母' : '-';
     const age = Store.getPetAge(pet.birthday);
+
+    // 返回按钮
+    const backBtn = `
+      <div style="display: flex; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #f0f0f0;">
+        <button onclick="App.navigateTo('home')" style="width: 32px; height: 32px; border-radius: 8px; background: #f5f5f5; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
+        </button>
+        <span style="flex: 1; text-align: center; font-size: 16px; font-weight: 600; color: #333; margin-right: 32px;">宠物档案</span>
+      </div>
+    `;
     
     const vaccineRecords = pet.vaccineRecords || [];
     const dewormingRecords = pet.dewormingRecords || [];
     
     return `
       <div class="page-content pet-profile-page">
+        ${backBtn}
         <div class="profile-header">
           <div class="profile-avatar">${avatar}</div>
           <div class="profile-info">
@@ -694,7 +709,9 @@ const Pages = {
               <span class="profile-tag">${age}</span>
             </div>
           </div>
-          <button class="profile-edit-btn" onclick="App.showEditPetModal('${pet.id}')">✏️</button>
+          <button class="profile-edit-btn" onclick="App.showEditPetModal('${pet.id}')" style="background: none; border: none; cursor: pointer; font-size: 18px; padding: 4px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
         </div>
         
         <div class="info-grid" style="padding: 16px;">
@@ -726,7 +743,7 @@ const Pages = {
         
         <div class="health-records-section">
           <div class="section-header" style="padding-left: 0;">
-            <h3>💉 疫苗记录</h3>
+            <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M18 2l4 4M7.5 20.5L19 9l-4-4L3.5 16.5 2 22l5.5-1.5z"/></svg>疫苗记录</h3>
             <span class="section-more" onclick="App.showAddHealthRecordModal('${pet.id}', 'vaccineRecords')">+ 添加</span>
           </div>
           ${vaccineRecords.length > 0
@@ -743,7 +760,7 @@ const Pages = {
           }
           
           <div class="section-header" style="padding-left: 0; margin-top: 16px;">
-            <h3>💊 驱虫记录</h3>
+            <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>驱虫记录</h3>
             <span class="section-more" onclick="App.showAddHealthRecordModal('${pet.id}', 'dewormingRecords')">+ 添加</span>
           </div>
           ${dewormingRecords.length > 0
