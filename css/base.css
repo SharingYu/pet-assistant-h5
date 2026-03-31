@@ -371,3 +371,158 @@ input, textarea, select {
   50% { transform: scale(1.02); }
   100% { transform: scale(1); }
 }
+
+/* ========== Toast 样式 ========== */
+#toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  max-width: 80%;
+  text-align: center;
+}
+#toast.show {
+  opacity: 1;
+}
+
+/* ========== 页面切换动画 ========== */
+#pagesContainer {
+  overflow-x: hidden;
+}
+.page-content {
+  animation: pageIn 0.2s ease-out;
+}
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 诊断页特殊动画 */
+.diagnosis-page {
+  animation: slideUp 0.25s ease-out;
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== 按钮反馈 ========== */
+.btn:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+.btn {
+  transition: all 0.2s;
+}
+
+/* ========== 卡片交互 ========== */
+.type-card:active {
+  transform: scale(0.97);
+}
+.diagnosis-card:active,
+.result-card:active,
+.reminder-item:active,
+.post-card:active {
+  opacity: 0.9;
+  transform: scale(0.99);
+}
+
+/* ========== Modal 动画 ========== */
+.modal-mask {
+  transition: background-color 0.2s;
+}
+.modal-content {
+  transition: transform 0.25s ease-out, opacity 0.2s;
+}
+
+/* ========== 滚动优化 ========== */
+.page-content {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* ========== 滚动条美化 ========== */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ========== 输入框聚焦样式 ========== */
+input:focus, textarea:focus, select:focus {
+  border-color: #FF9500 !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.1);
+}
+
+/* ========== Modal 增强 ========== */
+.modal-mask {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.modal-content {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  border-radius: 16px 16px 0 0;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-mask.show {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* ========== 选中状态优化 ========== */
+.type-card.selected {
+  animation: selectPop 0.2s ease-out;
+}
+@keyframes selectPop {
+  0% { transform: scale(0.95); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ========== 首页增强 ========== */
+.home-header {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* ========== TabBar 增强 ========== */
+.tab-item.active .tab-icon {
+  color: #FF9500;
+}
+.tab-item.active .tab-label {
+  color: #FF9500;
+}

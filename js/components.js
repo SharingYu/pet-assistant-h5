@@ -10,8 +10,12 @@ const Toast = {
     el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), duration);
   },
-  success(message) { this.show(`<span style="color:#52C41A">✓</span> ${message}`); },
-  error(message) { this.show(`<span style="color:#FF4D4F">✗</span> ${message}`); },
+  success(message) {
+    this.show(`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#52C41A" stroke-width="2.5" style="flex-shrink:0"><path d="M20 6L9 17l-5-5"/></svg> ${message}`);
+  },
+  error(message) {
+    this.show(`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D4F" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg> ${message}`, 3000);
+  },
   info(message) { this.show(message); }
 };
 
