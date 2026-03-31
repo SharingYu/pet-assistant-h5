@@ -69,24 +69,24 @@ const API = {
 
   // ========== 话题标签（静态配置） ==========
   topics: [
-    { id: 'daily', name: '#晒宠#', desc: '分享日常', icon: '📸' },
-    { id: 'health', name: '#宠物健康#', desc: '健康讨论', icon: '💊' },
-    { id: 'skin', name: '#皮肤病#', desc: '皮肤问题', icon: '🔴' },
-    { id: 'food', name: '#宠物饮食#', desc: '吃什么好', icon: '🍖' },
-    { id: 'behavior', name: '#行为问题#', desc: '行为训练', icon: '🧠' },
-    { id: 'match', name: '#宠物相亲#', desc: '配种社交', icon: '💕' },
-    { id: 'travel', name: '#携宠出行#', desc: '旅行分享', icon: '✈️' },
-    { id: 'skill', name: '#技能学习#', desc: '技能训练', icon: '🎓' }
+    { id: 'daily', name: '晒宠', desc: '分享日常', svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="#FF9500" stroke="none"/><path d="M21 15l-5-5L8 18"/></svg>' },
+    { id: 'health', name: '宠物健康', desc: '健康讨论', svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
+    { id: 'skin', name: '皮肤病', desc: '皮肤问题', svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12s1-2 2-2 2 2 2 2-1 2-2 2-2-2-2-2"/></svg>' },
+    { id: 'food', name: '宠物饮食', desc: '吃什么好', svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>' },
+    { id: 'behavior', name: '行为问题', desc: '行为训练', svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>' },
+    { id: 'match', name: '宠物相亲', desc: '配种社交', svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' },
+    { id: 'travel', name: '携宠出行', desc: '旅行分享', svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>' },
+    { id: 'skill', name: '技能学习', desc: '技能训练', svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>' }
   ],
 
   // ========== 提醒类型（静态配置） ==========
   reminderTypes: [
-    { id: 'vaccine', icon: '💉', color: '#52C41A', name: '疫苗' },
-    { id: 'deworm', icon: '💊', color: '#722ED1', name: '驱虫' },
-    { id: 'checkup', icon: '🏥', color: '#1890FF', name: '体检' },
-    { id: 'bath', icon: '🛁', color: '#13C2C2', name: '洗澡' },
-    { id: 'medicine', icon: '💊', color: '#FAAD14', name: '用药' },
-    { id: 'other', icon: '📌', color: '#F5222D', name: '其他' }
+    { id: 'vaccine', svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#52C41A" stroke-width="2"><path d="M18 2l4 4M7.5 20.5L19 9l-4-4L3.5 16.5 2 22l5.5-1.5z"/></svg>', color: '#52C41A', name: '疫苗' },
+    { id: 'deworm', svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#722ED1" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>', color: '#722ED1', name: '驱虫' },
+    { id: 'checkup', svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1890FF" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>', color: '#1890FF', name: '体检' },
+    { id: 'bath', svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#13C2C2" stroke-width="2"><path d="M9 2v6M12 2v6M15 2v6"/><ellipse cx="12" cy="16" rx="8" ry="4"/><path d="M4 16v2a8 4 0 0 0 8 4h0a8 4 0 0 0 8-4v-2"/></svg>', color: '#13C2C2', name: '洗澡' },
+    { id: 'medicine', svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FAAD14" stroke-width="2"><path d="M10.5 20.5L3.5 13.5a4.95 4.95 0 0 1 7-7l7 7a4.95 4.95 0 0 1-7 7zM8.5 8.5l7 7"/></svg>', color: '#FAAD14', name: '用药' },
+    { id: 'other', svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5222D" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>', color: '#F5222D', name: '其他' }
   ],
 
   // ========== 宠物类型（静态配置） ==========

@@ -238,9 +238,9 @@ const App = {
     }
     
     const petOptions = pets.map((p, i) => `<option value="${p.id}" ${i === 0 ? 'selected' : ''}>${p.name}</option>`).join('');
-    const typeOptions = API.reminderTypes.map(t => 
+    const typeOptions = API.reminderTypes.map(t =>
       `<div class="type-card" data-type="${t.id}" style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 20px;">${t.icon}</span>
+        <span style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">${t.svgIcon}</span>
         <span class="type-name">${t.name}</span>
       </div>`
     ).join('');
@@ -326,7 +326,7 @@ const App = {
     }
     
     const petOptions = pets.map((p, i) => `<option value="${p.id}">${p.name}</option>`).join('');
-    const topicOptions = API.topics.map(t => `<option value="${t.name}">${t.icon} ${t.name}</option>`).join('');
+    const topicOptions = API.topics.map(t => `<option value="${t.name}">${t.svgIcon || ''} ${t.name}</option>`).join('');
     
     Modal.show(`
       <div class="modal-header">

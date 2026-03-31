@@ -19,7 +19,7 @@ const Pages = {
           <div class="pets-container">
             ${pets.map(pet => renderPetCard(pet)).join('')}
             <div class="pet-card" onclick="App.showAddPetModal()" style="border: 2px dashed var(--border); background: transparent;">
-              <div class="pet-avatar" style="background: var(--bg); font-size: 28px;">➕</div>
+              <div class="pet-avatar" style="background: var(--bg); font-size: 28px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg></div>
               <div class="pet-name" style="color: var(--text-light); font-size: 14px;">添加宠物</div>
             </div>
           </div>
@@ -331,7 +331,7 @@ const Pages = {
         content = `
           <div style="padding: 16px; background: #f9f9f9; margin: 0 16px; border-radius: 12px;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
-              <span style="font-size: 24px;">🐾</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.5"><ellipse cx="12" cy="14" rx="5" ry="4"/><circle cx="8" cy="9" r="2"/><circle cx="16" cy="9" r="2"/><circle cx="6" cy="13" r="1.5"/><circle cx="18" cy="13" r="1.5"/></svg>
               <span style="font-size: 14px; color: #666;">诊断对象：<strong>${pet?.name || ''}</strong></span>
             </div>
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
@@ -357,7 +357,7 @@ const Pages = {
           </div>
 
           <div style="padding: 16px; margin: 0 16px; background: var(--bg); border-radius: 12px;">
-            <div style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">📌 拍照建议：</div>
+            <div style="font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>拍照建议：</div>
             <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.8; white-space: pre-line;">${API.getUploadTips(s.selectedType)}</div>
           </div>
 

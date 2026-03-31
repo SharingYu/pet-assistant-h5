@@ -123,17 +123,17 @@ function renderDiagnosisTypeCard(type, selected, onClick) {
 // 提醒项
 function renderReminderItem(reminder, onDone, onDelete) {
   // 兼容旧格式（localStorage）和新格式（API）
-  const typeInfo = API.reminderTypes.find(t => t.id === reminder.type) || { icon: '📌', color: '#F5222D', name: '其他' };
-  const icon = reminder.icon || typeInfo.icon;
+  const typeInfo = API.reminderTypes.find(t => t.id === reminder.type) || { svgIcon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5222D" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>', color: '#F5222D', name: '其他' };
+  const svgIcon = reminder.svgIcon || typeInfo.svgIcon;
   const color = reminder.color || typeInfo.color;
   const reminderTypeName = reminder.reminderTypeName || typeInfo.name;
   const displayDate = (reminder.reminderDate || reminder.date || '').slice(0, 10);
   const petName = reminder.petName || reminder.pet?.name || '宠物';
-  
+
   return `
     <div class="reminder-item" data-id="${reminder.id}">
       <div class="reminder-icon" style="background: ${color}20;">
-        <span>${icon}</span>
+        <span>${svgIcon}</span>
       </div>
       <div class="reminder-info">
         <div class="reminder-title">${reminder.title}</div>
@@ -150,11 +150,17 @@ function renderReminderItem(reminder, onDone, onDelete) {
 
 // 帖子卡片
 function renderPostCard(post) {
-  const emoji = post.author.petType === 'cat' ? '🐱' : post.author.petType === 'dog' ? '🐶' : '🐾';
+  const petTypeSvg = {
+    cat: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.5"><ellipse cx="12" cy="14" rx="5" ry="4.5"/><path d="M7 10L5 5L9 9M17 10L19 5L15 9"/><circle cx="10" cy="13" r="0.8" fill="#FF9500" stroke="none"/><circle cx="14" cy="13" r="0.8" fill="#FF9500" stroke="none"/></svg>',
+    dog: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.5"><ellipse cx="12" cy="14" rx="6" ry="5"/><circle cx="9" cy="8" r="2"/><circle cx="15" cy="8" r="2"/><circle cx="10" cy="13" r="0.8" fill="#FF9500" stroke="none"/><circle cx="14" cy="13" r="0.8" fill="#FF9500" stroke="none"/></svg>',
+    rabbit: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.5"><ellipse cx="12" cy="15" rx="5" ry="4"/><path d="M9 11L8 4Q9 3 10 5L10 11M15 11L16 4Q15 3 14 5L14 11"/></svg>',
+    hamster: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.5"><ellipse cx="12" cy="13" rx="6" ry="5"/><circle cx="8.5" cy="11" r="1.8"/><circle cx="15.5" cy="11" r="1.8"/><circle cx="10" cy="13" r="0.6" fill="#FF9500" stroke="none"/><circle cx="14" cy="13" r="0.6" fill="#FF9500" stroke="none"/></svg>'
+  };
+  const avatarSvg = petTypeSvg[post.author.petType] || petTypeSvg.dog;
   const imagesHtml = post.images && post.images.length > 0
     ? `<div class="post-images">${post.images.map(img => `<img class="post-image" src="${img}" alt="">`).join('')}</div>`
     : '';
-  
+
   const aiReplyHtml = post.aiReply
     ? `<div class="post-ai-reply">
         <div class="post-ai-reply-header">
@@ -164,33 +170,35 @@ function renderPostCard(post) {
         <div class="post-ai-text">${post.aiReply}</div>
       </div>`
     : '';
-  
+
   return `
     <div class="post-card" data-id="${post.id}">
       <div class="post-header">
-        <div class="post-avatar">${emoji}</div>
+        <div class="post-avatar" style="background: #FFF2E8; display: flex; align-items: center; justify-content: center;">${avatarSvg}</div>
         <div class="post-author-info">
           <div>
             <span class="post-author-name">${post.author.name}</span>
-            <span class="post-pet-tag">${emoji} ${post.author.petName}</span>
           </div>
-          <div class="post-time">${post.time}</div>
+          <div class="post-time">${post.time || ''}</div>
         </div>
       </div>
-      <div class="post-content">${post.content}</div>
+      ${post.content ? `<div class="post-content">${post.content}</div>` : ''}
       ${imagesHtml}
       ${aiReplyHtml}
       <div class="post-interactions">
         <div class="interaction-btn ${post.isLiked ? 'liked' : ''}" data-action="like">
-          <span class="icon">${post.isLiked ? '❤️' : '🤍'}</span>
-          <span>${post.likes}</span>
+          ${post.isLiked
+            ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="#ff4d4f" stroke="#ff4d4f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+          }
+          <span>${post.likes || 0}</span>
         </div>
         <div class="interaction-btn" data-action="comment">
-          <span class="icon">💬</span>
-          <span>${post.comments}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>${post.comments || 0}</span>
         </div>
         <div class="interaction-btn" data-action="share">
-          <span class="icon">↗️</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
           <span>分享</span>
         </div>
       </div>
@@ -230,11 +238,15 @@ function renderDiagnosisHistoryCard(diagnosis) {
 
 // 评论项
 function renderCommentItem(comment) {
-  const emoji = comment.petType === 'cat' ? '🐱' : comment.petType === 'dog' ? '🐶' : '🐾';
+  const petTypeSvg = {
+    cat: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.5"><ellipse cx="12" cy="14" rx="5" ry="4.5"/><path d="M7 10L5 5L9 9M17 10L19 5L15 9"/><circle cx="10" cy="13" r="0.8" fill="#FF9500" stroke="none"/><circle cx="14" cy="13" r="0.8" fill="#FF9500" stroke="none"/></svg>',
+    dog: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.5"><ellipse cx="12" cy="14" rx="6" ry="5"/><circle cx="9" cy="8" r="2"/><circle cx="15" cy="8" r="2"/><circle cx="10" cy="13" r="0.8" fill="#FF9500" stroke="none"/><circle cx="14" cy="13" r="0.8" fill="#FF9500" stroke="none"/></svg>'
+  };
+  const avatarSvg = petTypeSvg[comment.petType] || petTypeSvg.dog;
   return `
     <div class="comment-item" style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-        <span style="font-size: 18px;">${emoji}</span>
+        <span style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">${avatarSvg}</span>
         <span style="font-weight: 500; font-size: 13px;">${comment.author}</span>
         <span style="font-size: 11px; color: #999;">${comment.time}</span>
       </div>
@@ -277,9 +289,9 @@ function renderAddPetForm(pet = null) {
           <div class="type-grid" style="grid-template-columns: repeat(5, 1fr); padding: 0;">
             ${API.petTypes.map(pt => {
               const isSelected = (pet?.type || 'cat') === pt.id;
-              const label = pt.name.replace('🐱 ', '').replace('🐶 ', '').replace('🐰 ', '').replace('🐹 ', '').replace('🐾 ', '');
+              const label = pt.name.replace('🐱 ', '').replace('🐶 ', '').replace('🐰 ', '').replace('🐹 ', '').replace('🐾 ', '').replace('🐶 狗狗', '狗狗').replace('🐱 猫咪', '猫咪').replace('🐰 兔子', '兔子').replace('🐹 仓鼠', '仓鼠').replace('🐾 其他', '其他');
               return `<div class="type-card ${isSelected ? 'selected' : ''}" data-type="${pt.id}" onclick="selectPetType(this)" style="padding: 8px 4px;">
-                <span class="type-icon" style="font-size: 24px;">${pt.emoji}</span>
+                <span class="type-icon" style="font-size: 24px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 4px;">${pt.emoji}</span>
                 <span class="type-name" style="font-size: 11px;">${label}</span>
               </div>`;
             }).join('')}

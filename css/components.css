@@ -1544,3 +1544,73 @@
   background: #ff4d4f;
   color: white;
 }
+
+/* ========== 帖子互动 ========== */
+.post-interactions {
+  display: flex;
+  gap: 0;
+  margin-top: 10px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+}
+.interaction-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  color: #999;
+  background: none;
+  border: none;
+}
+.interaction-btn:hover {
+  background: #f5f5f5;
+  color: #FF9500;
+}
+.interaction-btn.liked {
+  color: #ff4d4f;
+}
+.post-content {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+.post-images {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+.post-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.post-ai-reply {
+  background: #fffbf0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  border-left: 3px solid #FF9500;
+}
+.post-ai-reply-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #666;
+}
+.post-ai-text {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.5;
+}
