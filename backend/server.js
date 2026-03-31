@@ -420,7 +420,7 @@ const routes = {
     json(res, { success: true, data: result });
   },
   
-  'POST /api/posts': (req, res, _, body) => {
+  'POST /api/posts': (req, res, userId, body) => {
     if (!body.content) return json(res, { success: false, message: '内容不能为空' }, 400);
     const post = DB.posts.create({ ...body, userId });
     json(res, { success: true, data: { ...post, isLiked: false } });
