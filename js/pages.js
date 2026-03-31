@@ -822,7 +822,12 @@ async submitAuth() {
       TokenManager.setUser(res.data.user);
       Store.setUser(res.data.user);
       App.hideTabBar();
-      App.navigateTo('home');
+      App.showLoading('加载数据...');
+      Store.loadFromAPI().then(() => {
+        App.hideLoading();
+        App.navigateTo('home');
+        TabBar.updateBadge();
+      });
     } else {
       s.error = res.message || '操作失败，请重试';
       s.loading = false;

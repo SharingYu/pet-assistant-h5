@@ -20,9 +20,14 @@ const App = {
     // 根据登录态决定首页
     if (TokenManager.isLoggedIn()) {
       Store.setUser(TokenManager.getUser());
+      App.showLoading('加载宠物数据...');
       Store.loadFromAPI().then(() => {
+        App.hideLoading();
         this.navigateTo('home');
         TabBar.updateBadge();
+      }).catch(() => {
+        App.hideLoading();
+        Toast.error('加载失败，请刷新重试');
       });
     } else {
       this.navigateTo('auth');
@@ -416,6 +421,22 @@ const App = {
   
   showTabBar() {
     document.getElementById('tabbar').style.display = '';
+  },
+  
+  // ========== Loading ==========
+  showLoading(text = '加载中...') {
+    const el = document.getElementById('loadingOverlay');
+    if (!el) return;
+    el.querySelector('div:last-child').textContent = text;
+    el.style.display = 'flex';
+    requestAnimationFrame(() => { el.style.opacity = '1'; });
+  },
+  
+  hideLoading() {
+    const el = document.getElementById('loadingOverlay');
+    if (!el) return;
+    el.style.opacity = '0';
+    setTimeout(() => { el.style.display = 'none'; }, 300);
   },
   
   // ========== 图片上传 ==========

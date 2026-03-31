@@ -298,9 +298,13 @@ function signToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 }
 
-// CORS 头
-function setCors(res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+// CORS 白名单
+const CORS_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:3001,http://localhost:3000').split(',');
+
+function setCors(res, req) {
+  const origin = req.headers.origin || '';
+  const allowed = CORS_ORIGINS.includes('*') || CORS_ORIGINS.includes(origin);
+  res.setHeader('Access-Control-Allow-Origin', allowed ? origin : CORS_ORIGINS[0] || '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
@@ -518,7 +522,7 @@ function mockDiagnose(type) {
 DB.load();
 
 const server = http.createServer((req, res) => {
-  setCors(res);
+  setCors(res, req);
   
   if (req.method === 'OPTIONS') {
     return json(res, { success: true });
