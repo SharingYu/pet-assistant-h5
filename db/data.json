@@ -118,6 +118,13 @@
       "password": "$2a$10$1gMea1Cr7g4lWSOqHJ8rIOm.Xxvt8m6ghZ0DuZOmFf33wpZWeOdS6",
       "nickname": "yushiyuan",
       "createdAt": "2026-03-31T13:53:04.502Z"
+    },
+    {
+      "id": "134cc575-66e0-4e50-bb25-eeb175c15612",
+      "username": "testuser_726",
+      "password": "$2a$10$TuEDvkzzrOs/xlUiAO.MaeiQlXY83QAUqckKY5BiP42cQZzgyrjxO",
+      "nickname": "测试用户",
+      "createdAt": "2026-03-31T16:36:25.482Z"
     }
   ],
   "pets": [
@@ -182,6 +189,15 @@
       "sterilization": false,
       "userId": "ae3fd53f-1af7-4c78-860e-7d0ba07d6bd1",
       "createdAt": "2026-03-31T13:53:31.627Z"
+    },
+    {
+      "id": "ad4e429a-70cf-447d-8feb-9d93e40b0318",
+      "name": "豆豆",
+      "type": "dog",
+      "breed": "柴犬",
+      "gender": "male",
+      "userId": "134cc575-66e0-4e50-bb25-eeb175c15612",
+      "createdAt": "2026-03-31T16:36:25.537Z"
     }
   ],
   "healthRecords": [
@@ -261,6 +277,16 @@
       "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
       "done": false,
       "createdAt": "2026-03-31T13:39:01.069Z"
+    },
+    {
+      "id": "a73744e2-8a7e-4a94-9c0d-4ef753338f13",
+      "petId": "ad4e429a-70cf-447d-8feb-9d93e40b0318",
+      "title": "疫苗接种",
+      "type": "vaccine",
+      "reminderDate": "2026-04-15",
+      "userId": "134cc575-66e0-4e50-bb25-eeb175c15612",
+      "done": false,
+      "createdAt": "2026-03-31T16:36:25.590Z"
     }
   ],
   "posts": [
@@ -387,7 +413,7 @@
       },
       "userId": "c1e2783f-f9dc-45aa-8003-1645176b01ab",
       "likes": 0,
-      "commentsCount": 1,
+      "commentsCount": 2,
       "createdAt": "2026-03-31T07:23:26.228Z"
     },
     {
@@ -428,9 +454,24 @@
         "petType": "dog"
       },
       "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
-      "likes": 0,
-      "commentsCount": 0,
+      "likes": 1,
+      "commentsCount": 1,
       "createdAt": "2026-03-31T08:25:34.042Z"
+    },
+    {
+      "id": "2bf7fd90-0838-4f52-af9a-8f9159934c9c",
+      "author": {
+        "name": "包包的家长",
+        "petName": "包包",
+        "petType": "cat"
+      },
+      "content": "哎呀呀",
+      "topic": "晒宠",
+      "images": [],
+      "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "likes": 1,
+      "commentsCount": 1,
+      "createdAt": "2026-03-31T16:48:51.246Z"
     }
   ],
   "comments": [
@@ -517,6 +558,27 @@
       "postId": "d2310546-63a1-4c29-8e92-de2e96d92d00",
       "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
       "createdAt": "2026-03-31T08:25:34.114Z"
+    },
+    {
+      "id": "ce3523cd-aaa0-4582-be90-25f97a76668d",
+      "content": "你好",
+      "postId": "5f45875f-c3a9-480c-8254-d94376822dfe",
+      "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "createdAt": "2026-03-31T16:33:12.386Z"
+    },
+    {
+      "id": "59251aff-abea-46c3-a672-d4336603f874",
+      "content": "你好",
+      "postId": "61d3ab2a-7d93-4346-82ee-a3bccc9b5f36",
+      "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "createdAt": "2026-03-31T16:33:29.628Z"
+    },
+    {
+      "id": "c1a8ff2a-7015-4c3b-abd4-c0cc8fc0d21d",
+      "content": "看得到吗",
+      "postId": "2bf7fd90-0838-4f52-af9a-8f9159934c9c",
+      "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "createdAt": "2026-03-31T16:48:57.851Z"
     }
   ],
   "likes": [
@@ -543,6 +605,18 @@
       "postId": "d2310546-63a1-4c29-8e92-de2e96d92d00",
       "userId": "c2a6f7d4-0439-4798-bb8c-6caa27ebc5e5",
       "createdAt": "2026-03-31T08:25:34.092Z"
+    },
+    {
+      "id": "da22fd60-5e97-4bb7-b450-74fc4d8a8bc0",
+      "postId": "5f45875f-c3a9-480c-8254-d94376822dfe",
+      "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "createdAt": "2026-03-31T16:33:36.888Z"
+    },
+    {
+      "id": "11b4fe23-2180-4437-b5c5-a23f220d0f6b",
+      "postId": "2bf7fd90-0838-4f52-af9a-8f9159934c9c",
+      "userId": "d034ff95-15f7-43cd-95c0-458a54d2d632",
+      "createdAt": "2026-03-31T16:49:41.712Z"
     }
   ],
   "diagnoses": [
@@ -1072,6 +1146,494 @@
         }
       ],
       "createdAt": "2026-03-31T15:53:12.355Z"
+    },
+    {
+      "id": "5bc89ac0-2c0f-42d4-9751-e559e0e0a331",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "测试症状",
+      "triage": "轻度",
+      "severity": 2,
+      "severityLabel": "一般紧急",
+      "summary": "宠物皮肤有测试症状，需观察是否有异常。",
+      "possibleCauses": [
+        "皮肤过敏",
+        "轻微感染"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "不要自行使用药物"
+        ]
+      },
+      "consultNow": "建议观察并咨询兽医。",
+      "homeCareAdvice": "注意皮肤变化，及时就医。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T16:18:18.795Z"
+    },
+    {
+      "id": "b8552902-efba-4cdb-9707-e357307e2ea5",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部大面积脱毛，红斑，剧烈瘙痒",
+      "imageUrl": "",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "犬背部大面积脱毛、红斑和剧烈瘙痒，可能为皮肤疾病。",
+      "possibleCauses": [
+        "真菌感染",
+        "过敏性皮炎"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持患处清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "自行使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快带去兽医检查",
+      "homeCareAdvice": "观察症状变化并保持环境清洁",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T16:36:27.107Z"
+    },
+    {
+      "id": "ffef962f-ed6b-4489-a361-b72342945a6f",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部大面积脱毛，红斑，剧烈瘙痒",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "犬背部大面积脱毛、红斑和剧烈瘙痒，可能为皮肤病。",
+      "possibleCauses": [
+        "真菌感染",
+        "过敏性皮炎"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快就医检查",
+      "homeCareAdvice": "观察症状变化并保持环境清洁",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T16:39:40.781Z"
+    },
+    {
+      "id": "e05456b7-195a-43aa-b970-0734c4efa4f0",
+      "petType": "dog",
+      "bodyPart": "digestive",
+      "symptoms": "狗狗拉稀2天，精神变差",
+      "imageUrl": "",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要尽快就医",
+      "summary": "狗狗拉稀2天，精神变差，需关注可能病因。",
+      "possibleCauses": [
+        "肠胃感染",
+        "饮食不当"
+      ],
+      "urgentRedFlags": [
+        "持续呕吐",
+        "脱水迹象"
+      ],
+      "homeCare": {
+        "canDo": [
+          "提供干净的水",
+          "暂时禁食12小时"
+        ],
+        "avoid": [
+          "喂食人类食物"
+        ]
+      },
+      "consultNow": "建议尽快带去兽医处检查。",
+      "homeCareAdvice": "观察狗狗的精神状态和排便情况。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗拉稀2天精神不好，是肠胃炎还是细小？",
+          "platform": "小红书",
+          "summary": "狗狗拉稀，精神变差，食欲下降，担心是细小病毒",
+          "url": ""
+        },
+        {
+          "title": "【急】狗狗呕吐黄绿色液体是怎么回事？",
+          "platform": "宠物论坛",
+          "summary": "狗狗呕吐，吐黄绿色液体，精神差，需要立即就医吗",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T16:41:51.185Z"
+    },
+    {
+      "id": "b2cf9e12-95cc-4525-a314-185a1352a086",
+      "petType": "cat",
+      "bodyPart": "eye",
+      "symptoms": "",
+      "imageUrl": "",
+      "triage": "轻度",
+      "severity": 1,
+      "severityLabel": "非紧急",
+      "summary": "宠物猫眼部无明显症状，需观察。",
+      "possibleCauses": [
+        "轻微刺激",
+        "环境因素"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持眼部清洁",
+          "观察是否有异常分泌物"
+        ],
+        "avoid": [
+          "避免自行用药"
+        ]
+      },
+      "consultNow": "无需立即就医。",
+      "homeCareAdvice": "继续观察宠物眼部状态。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "猫咪眼睛浑浊发蓝是白内障吗？还有救吗？",
+          "platform": "知乎",
+          "summary": "我家猫10岁了，最近发现眼睛看起来有点浑浊发蓝",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T16:41:52.906Z"
+    },
+    {
+      "id": "ef603971-d367-44e9-ba56-cf454bbf0631",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部红斑，瘙痒",
+      "triage": "轻度",
+      "severity": 2,
+      "severityLabel": "需要关注",
+      "summary": "犬背部红斑伴瘙痒，可能为皮肤过敏或寄生虫感染。",
+      "possibleCauses": [
+        "跳蚤或螨虫感染",
+        "食物或环境过敏"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快就医检查。",
+      "homeCareAdvice": "观察症状变化，避免进一步刺激。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T16:56:36.040Z"
+    },
+    {
+      "id": "dd92c223-8a00-48ca-b274-149123a73946",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部红斑瘙痒",
+      "triage": "轻度",
+      "severity": 2,
+      "severityLabel": "较不紧急",
+      "summary": "犬背部红斑瘙痒，可能为皮肤过敏或寄生虫感染。",
+      "possibleCauses": [
+        "皮肤过敏",
+        "寄生虫感染"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "使用人类药物"
+        ]
+      },
+      "consultNow": "如无恶化可观察，否则建议就医。",
+      "homeCareAdvice": "注意观察是否加重或出现其他症状。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T17:08:39.619Z"
+    },
+    {
+      "id": "dc709119-a984-438a-9675-3b8bd7614e1e",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "背部红斑瘙痒",
+      "triage": "轻度",
+      "severity": 2,
+      "severityLabel": "需要关注",
+      "summary": "犬背部红斑瘙痒，可能为皮肤过敏或寄生虫感染。",
+      "possibleCauses": [
+        "跳蚤或螨虫感染",
+        "过敏性皮炎"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持宠物清洁",
+          "使用抗瘙痒洗浴产品"
+        ],
+        "avoid": [
+          "抓挠患处"
+        ]
+      },
+      "consultNow": "建议尽快就医检查",
+      "homeCareAdvice": "观察症状变化，避免进一步刺激皮肤。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T17:20:51.090Z"
+    },
+    {
+      "id": "de4e3b1e-658b-4430-a5d8-61fa9c42f7a4",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "红斑瘙痒",
+      "triage": "中度",
+      "severity": 3,
+      "severityLabel": "需要关注",
+      "summary": "犬出现红斑和瘙痒，可能为皮肤问题。",
+      "possibleCauses": [
+        "过敏反应",
+        "寄生虫感染"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快就医检查。",
+      "homeCareAdvice": "观察症状变化，保持环境清洁。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T17:28:36.782Z"
+    },
+    {
+      "id": "adc1e691-943a-492a-a79b-eb823664e9c6",
+      "petType": "dog",
+      "bodyPart": "skin",
+      "symptoms": "红斑瘙痒",
+      "triage": "轻度",
+      "severity": 2,
+      "severityLabel": "中等紧急",
+      "summary": "犬出现红斑和瘙痒，可能为过敏或皮肤感染。",
+      "possibleCauses": [
+        "过敏反应",
+        "皮肤真菌感染"
+      ],
+      "urgentRedFlags": [],
+      "homeCare": {
+        "canDo": [
+          "保持皮肤清洁干燥",
+          "避免抓挠"
+        ],
+        "avoid": [
+          "使用人类药物"
+        ]
+      },
+      "consultNow": "建议尽快就医确认原因。",
+      "homeCareAdvice": "观察症状变化并保持环境清洁。",
+      "visualAnalysis": null,
+      "possibleConditions": [],
+      "aiUsed": "qwen-vl-plus",
+      "communityRefs": [
+        {
+          "title": "狗狗皮肤脱毛红斑瘙痒怎么办？求有经验的家长支招",
+          "platform": "小红书",
+          "summary": "我家狗子最近身上出现红斑，脱毛严重，一直挠，怀疑是皮肤病",
+          "url": ""
+        },
+        {
+          "title": "【求助】泰迪犬皮肤红斑脱毛是螨虫还是真菌？",
+          "platform": "小红书",
+          "summary": "泰迪三个月大开始出现皮肤问题，去了两家医院说法不一",
+          "url": ""
+        },
+        {
+          "title": "法斗皮肤红斑+严重瘙痒，是湿疹还是脓皮症？",
+          "platform": "知乎",
+          "summary": "法斗皮肤褶皱处发红、有渗出，狗狗一直舔，夜间尤为严重",
+          "url": ""
+        }
+      ],
+      "createdAt": "2026-03-31T17:30:54.155Z"
     }
   ]
 }

@@ -32,7 +32,6 @@ const Store = {
     this.state.comments = [];
     this.state.settings = this.load('settings') || this.state.settings;
     this.state.user = TokenManager.getUser(); // 可能为 null
-    console.log('Store initialized', this.state);
   },
 
   // 从 API 加载数据（登录后调用）

@@ -190,18 +190,18 @@ function renderPostCard(post) {
       ${imagesHtml}
       ${aiReplyHtml}
       <div class="post-interactions">
-        <div class="interaction-btn ${post.isLiked ? 'liked' : ''}" data-action="like">
+        <div class="interaction-btn ${post.isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')" style="cursor:pointer;">
           ${post.isLiked
             ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="#ff4d4f" stroke="#ff4d4f" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
             : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
           }
           <span>${post.likes || 0}</span>
         </div>
-        <div class="interaction-btn" data-action="comment">
+        <div class="interaction-btn" onclick="App.showPostComments('${post.id}')" style="cursor:pointer;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <span>${post.comments || 0}</span>
         </div>
-        <div class="interaction-btn" data-action="share">
+        <div class="interaction-btn" onclick="App.sharePost('${post.id}')" style="cursor:pointer;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
           <span>分享</span>
         </div>
@@ -582,3 +582,77 @@ function renderReminderDetail(reminderId) {
     </div>
   `;
 }
+
+// 添加提醒表单
+function renderAddReminderForm(pet) {
+  const petOptions = Store.getState('pets').map(p =>
+    `<option value="${p.id}" ${p.id === pet?.id ? 'selected' : ''}>${p.name}</option>`
+  ).join('');
+
+  return `
+    <div class="modal-header">
+      <h3 class="modal-title">添加提醒</h3>
+      <div class="modal-close" onclick="Modal.hide()">×</div>
+    </div>
+    <form class="modal-body" onsubmit="return false;" style="padding: 20px;">
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 6px;">选择宠物</label>
+        <select name="petId" required style="width: 100%; padding: 10px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 14px; background: #fafafa;">
+          <option value="">请选择宠物</option>
+          ${petOptions}
+        </select>
+      </div>
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 6px;">提醒类型</label>
+        <div class="type-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px;">
+          ${API.reminderTypes.map(t => `
+            <div class="type-card" data-type="${t.id}" onclick="selectReminderType(this)" style="padding: 8px; text-align: center; border: 1.5px solid #e0e0e0; border-radius: 10px; cursor: pointer;">
+              <div style="width: 24px; height: 24px; margin: 0 auto 4px; display: flex; align-items: center; justify-content: center;">${t.svgIcon}</div>
+              <div style="font-size: 11px; color: #666;">${t.name}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 6px;">提醒标题</label>
+        <input type="text" name="title" required placeholder="如：年度疫苗接种" style="width: 100%; padding: 10px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 14px; box-sizing: border-box; background: #fafafa;">
+      </div>
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 6px;">提醒时间</label>
+        <input type="date" name="date" required style="width: 100%; padding: 10px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 14px; box-sizing: border-box; background: #fafafa;">
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 16px;">
+        <button type="button" onclick="Modal.hide()" class="btn" style="flex: 1; background: #f5f5f5; color: #666; border: none; border-radius: 10px; padding: 12px;">取消</button>
+        <button type="submit" onclick="App.submitReminder(this.form)" class="btn btn-primary" style="flex: 1; border: none; border-radius: 10px; padding: 12px;">保存</button>
+      </div>
+    </form>
+  `;
+}
+
+// 提交提醒
+window.submitReminder = function(form) {
+  const formData = new FormData(form);
+  const selectedType = document.querySelector('.type-grid .type-card.selected');
+  const type = API.reminderTypes.find(t => t.id === selectedType?.dataset.type) || API.reminderTypes[0];
+  const petId = formData.get('petId');
+  const pet = Store.getState('pets').find(p => p.id === petId);
+
+  const reminder = {
+    petId,
+    petName: pet?.name || '',
+    type: type.id,
+    title: formData.get('title'),
+    reminderDate: formData.get('date'),
+    svgIcon: type.svgIcon,
+    color: type.color,
+    reminderTypeName: type.name
+  };
+
+  Store.createReminder(reminder).then(() => {
+    Toast.success('提醒已创建');
+    Modal.hide();
+    App.navigateTo('reminders');
+  }).catch(e => {
+    Toast.error('创建失败');
+  });
+};
