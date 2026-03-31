@@ -239,8 +239,8 @@ const App = {
     
     const petOptions = pets.map((p, i) => `<option value="${p.id}" ${i === 0 ? 'selected' : ''}>${p.name}</option>`).join('');
     const typeOptions = API.reminderTypes.map(t =>
-      `<div class="type-card" data-type="${t.id}" style="display: flex; align-items: center; gap: 8px;">
-        <span style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">${t.svgIcon}</span>
+      `<div class="type-card" data-type="${t.id}" onclick="selectReminderType(this)" style="display: flex; align-items: center; gap: 6px; padding: 10px 8px;">
+        <span style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">${t.svgIcon}</span>
         <span class="type-name">${t.name}</span>
       </div>`
     ).join('');
@@ -304,7 +304,7 @@ const App = {
         type: selectedType?.dataset.type || 'other',
         title: formData.get('title'),
         reminderDate: formData.get('date'),
-        icon: type.icon,
+        svgIcon: type.svgIcon,
         color: type.color,
         reminderTypeName: type.name
       };
