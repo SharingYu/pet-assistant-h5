@@ -482,7 +482,45 @@ const App = {
         Toast.error('上传失败');
       }
     });
-  }
+  },
+
+  submitReminder(form) {
+    if (!form) return;
+    const formData = new FormData(form);
+    const petId = formData.get('petId');
+    const type = formData.get('type');
+    const title = formData.get('title');
+    const date = formData.get('date');
+    if (!petId || !type || !title || !date) {
+      Toast.error('请填写完整信息');
+      return;
+    }
+    const pets = Store.getState('pets');
+    const pet = pets.find(p => p.id === petId);
+    Store.addReminder({
+      id: 'reminder_' + Date.now(),
+      petId, petName: pet?.name || '', type, title, date,
+      reminderDate: date, done: false, createdAt: new Date().toISOString()
+    });
+    Toast.success('提醒已添加');
+    Modal.hide();
+  },
+
+  sharePost(postId) {
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: '宠物社区', text: '来看看这个帖子', url });
+    } else {
+      navigator.clipboard?.writeText(url).then(() => Toast.success('链接已复制'));
+    }
+  },
+
+  showPostComments(postId) {
+    const posts = Store.getState('posts') || [];
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    Modal.show(renderCommentPanel(postId));
+  },
 };
 
 // ========== Diagnosis Controller ==========
