@@ -433,6 +433,27 @@ const Pages = {
             <p>⚠️ ${r.disclaimer || '本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。如有疑虑，请立即前往正规宠物医院就诊。'}</p>
           </div>
 
+          ${r.communityRefs && r.communityRefs.length > 0 ? `
+          <div class="community-refs-section" style="margin: 16px; padding: 14px; background: #f8f7ff; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color: #6366f1; flex-shrink: 0;"><path d="M21 11.5C21 16.1944 16.9706 20 12 20C10.6543 20 9.40193 19.7105 8.29176 19.2125C7.70989 18.9273 7.26403 18.4304 7.03439 17.8195C6.80474 17.2086 6.80751 16.5291 7.04221 15.9204C5.16689 14.8105 4 13.0519 4 11C4 6.80558 8.02944 3 12 3C12.104 3 12.2077 3.00238 12.3108 3.00619" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" transform="scale(0.9) translate(1,-1)"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M8 12H16M12 8V16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <span style="font-size: 13px; font-weight: 600; color: #4f46e5;">💬 还有其他用户有一样的疑问</span>
+            </div>
+            ${r.communityRefs.slice(0, 3).map((ref, i) => `
+              <div style="background: #fff; border-radius: 8px; padding: 10px 12px; margin-bottom: ${i < 2 ? '8px' : '0'};">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                  <span style="font-size: 11px; background: ${ref.platform === '小红书' ? '#ff2442' : ref.platform === '知乎' ? '#0084ff' : '#666'}; color: white; padding: 1px 6px; border-radius: 4px;">${ref.platform}</span>
+                </div>
+                <div style="font-size: 13px; color: #333; line-height: 1.4; margin-bottom: 3px;">${ref.title}</div>
+                <div style="font-size: 11px; color: #888; line-height: 1.4;">${ref.summary}</div>
+              </div>
+            `).join('')}
+            <div style="text-align: center; margin-top: 8px;">
+              <span style="font-size: 11px; color: #999;">以上内容来自公共平台，仅供參考</span>
+            </div>
+          </div>
+          ` : ''}
+
           <div class="action-buttons">
             <button class="btn btn-primary" onclick="Diagnosis.saveResult()">💾 保存结果</button>
             <button class="btn btn-secondary" onclick="Diagnosis.reset()">🔄 重新诊断</button>

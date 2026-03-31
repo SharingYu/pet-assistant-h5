@@ -472,17 +472,28 @@ const routes = {
   'POST /api/diagnosis': async (req, res, userId, body, params, query) => {
     const { petType, bodyPart, symptoms, imageUrl, type } = body;
 
+    // 加载社区参考
+    let communityRefs = [];
+    try {
+      const refPath = path.join(__dirname, 'community_refs.json');
+      if (fs.existsSync(refPath)) {
+        const refsData = JSON.parse(fs.readFileSync(refPath, 'utf8'));
+        const refKey = `${petType}_${bodyPart}`;
+        communityRefs = refsData[refKey] || refsData.general || [];
+      }
+    } catch (e) { /* ignore */ }
+
     // 新型式：petType + bodyPart（完整分诊）
     if (petType && bodyPart) {
       try {
         const result = await performTriageDiagnosis({ petType, bodyPart, symptoms: symptoms || '', imageUrl });
-        const diagnosis = DB.diagnoses.create({ ...body, ...result, userId, aiUsed: 'qwen-vl-plus' });
+        const diagnosis = DB.diagnoses.create({ ...body, ...result, userId, aiUsed: 'qwen-vl-plus', communityRefs });
         return json(res, { success: true, data: diagnosis });
       } catch (e) {
         console.error('AI分诊失败，切换备用方案:', e.message);
         // AI失败时使用知识库回退
         const result = mockDiagnose(bodyPart);
-        const diagnosis = DB.diagnoses.create({ ...body, ...result, userId, aiUsed: 'mock' });
+        const diagnosis = DB.diagnoses.create({ ...body, ...result, userId, aiUsed: 'mock', communityRefs });
         return json(res, { success: true, data: diagnosis, warning: 'AI服务暂时不可用，已使用本地知识库' });
       }
     }

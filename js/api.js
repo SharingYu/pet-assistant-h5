@@ -145,6 +145,7 @@ const API = {
             summary: d.summary,
             visualAnalysis: d.visualAnalysis,
             possibleConditions: d.possibleConditions || [],
+            communityRefs: d.communityRefs || [],
             aiAdvice: d.consultNow || d.summary || '',
             disclaimer: '本结果由 AI 辅助分析，仅供参考，不能替代专业兽医诊断。如有疑虑，请立即前往正规宠物医院就诊。',
             image: imageUrl,
