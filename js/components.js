@@ -488,3 +488,97 @@ function renderDiagnosisHistory() {
     </div>
   `;
 }
+
+// ========== 全局交互函数 ==========
+
+// 提醒类型选择
+window.selectReminderType = function(el) {
+  el.closest('.type-grid').querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  el.style.borderColor = '#FF9500';
+  el.style.background = '#FFFBF5';
+};
+
+// 删除帖子
+window.deletePost = function(postId) {
+  if (!confirm('确定删除这条帖子？')) return;
+  Store.deletePost(postId);
+  Toast.success('已删除');
+  Modal.hide();
+  App.navigateTo('community');
+};
+
+// 点赞/取消点赞
+window.toggleLike = function(postId) {
+  Store.toggleLike(postId);
+  Pages.render('community');
+};
+
+// 宠物类型选择（添加宠物表单）
+window.selectPetType = function(el) {
+  el.closest('.type-grid').querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+};
+
+// 性别选择
+window.selectGender = function(el) {
+  el.closest('.gender-selector').querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+};
+
+// 绝育开关
+window.toggleSterilization = function(el) {
+  const input = el.closest('label').querySelector('input[type="checkbox"]');
+  input.checked = !input.checked;
+  el.classList.toggle('on', input.checked);
+  el.style.background = input.checked ? '#52C41A' : '#e0e0e0';
+  el.querySelector('div').style.left = input.checked ? '24px' : '2px';
+};
+
+// 保存诊断结果
+window.saveDiagnosisResult = function() {
+  Toast.success('诊断结果已保存');
+  Modal.hide();
+};
+
+// 提醒详情
+function renderReminderDetail(reminderId) {
+  const reminders = Store.getState('reminders') || [];
+  const r = reminders.find(x => x.id === reminderId);
+  if (!r) return '<div class="modal-body"><p>提醒不存在</p></div>';
+
+  const typeInfo = API.reminderTypes.find(t => t.id === r.type) || { svgIcon: '', color: '#666', name: '其他' };
+  const done = r.done;
+  const date = (r.reminderDate || r.date || '').slice(0, 10);
+
+  return `
+    <div class="modal-header">
+      <h3 class="modal-title">提醒详情</h3>
+      <div class="modal-close" onclick="Modal.hide()">×</div>
+    </div>
+    <div class="modal-body" style="padding: 20px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: ${typeInfo.color}20; display: flex; align-items: center; justify-content: center;">
+          ${typeInfo.svgIcon}
+        </div>
+        <div>
+          <div style="font-size: 16px; font-weight: 600; color: #333;">${r.title}</div>
+          <div style="font-size: 13px; color: #999; margin-top: 2px;">${typeInfo.name} · ${r.petName || ''}</div>
+        </div>
+      </div>
+      <div style="background: #f5f5f5; border-radius: 10px; padding: 12px; margin-bottom: 16px;">
+        <div style="font-size: 13px; color: #666;">
+          <strong>提醒时间：</strong>${date}
+        </div>
+        <div style="font-size: 13px; color: #666; margin-top: 6px;">
+          <strong>状态：</strong>
+          <span style="color: ${done ? '#52c41a' : '#faad14'};">${done ? '已完成' : '待完成'}</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        ${!done ? `<button onclick="App.completeReminder('${r.id}')" class="btn btn-primary" style="flex: 1;">标记完成</button>` : ''}
+        <button onclick="App.deleteReminder('${r.id}')" class="btn" style="flex: 1; background: #fff1f0; color: #ff4d4f; border: 1px solid #ffccc7;">删除</button>
+      </div>
+    </div>
+  `;
+}

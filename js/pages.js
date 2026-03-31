@@ -985,39 +985,39 @@ renderAuth() {
 },
 
 switchAuthTab(mode) {
-  this.authState.mode = mode;
-  this.authState.error = null;
+  Pages.authState.mode = mode;
+  Pages.authState.error = null;
   const container = document.getElementById('pagesContainer');
-  if (container) container.innerHTML = this.renderAuth();
+  if (container) container.innerHTML = Pages.renderAuth();
 },
 
 async submitAuth() {
-  const s = this.authState;
+  const s = Pages.authState;
   if (s.loading) return;
-  
-  const username = document.getElementById('authUsername').value.trim();
-  const password = document.getElementById('authPassword').value.trim();
-  const nickname = document.getElementById('authNickname')?.value.trim() || username;
-  
+
+  const username = document.getElementById('authUsername')?.value?.trim() || '';
+  const password = document.getElementById('authPassword')?.value?.trim() || '';
+  const nickname = document.getElementById('authNickname')?.value?.trim() || username;
+
   if (!username || !password) {
     s.error = '请填写用户名和密码';
     const container = document.getElementById('pagesContainer');
-    if (container) container.innerHTML = this.renderAuth();
+    if (container) container.innerHTML = Pages.renderAuth();
     return;
   }
-  
+
   if (password.length < 6) {
     s.error = '密码至少6位';
     const container = document.getElementById('pagesContainer');
-    if (container) container.innerHTML = this.renderAuth();
+    if (container) container.innerHTML = Pages.renderAuth();
     return;
   }
-  
+
   s.loading = true;
   s.error = null;
   const container = document.getElementById('pagesContainer');
-  if (container) container.innerHTML = this.renderAuth();
-  
+  if (container) container.innerHTML = Pages.renderAuth();
+
   try {
     let res;
     if (s.mode === 'login') {
@@ -1025,7 +1025,7 @@ async submitAuth() {
     } else {
       res = await API_BASE.register(username, password, nickname);
     }
-    
+
     if (res.success && res.data && res.data.token) {
       TokenManager.setToken(res.data.token);
       TokenManager.setUser(res.data.user);

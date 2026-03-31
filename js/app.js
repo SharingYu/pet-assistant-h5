@@ -315,6 +315,24 @@ const App = {
     });
   },
   
+  // ========== 提醒 ==========
+  showReminderModal(reminderId) {
+    Modal.show(renderReminderDetail(reminderId));
+  },
+
+  deleteReminder(reminderId) {
+    if (!confirm('确定删除这条提醒？')) return;
+    Store.deleteReminder(reminderId);
+    Toast.success('已删除');
+    App.navigateTo('reminders');
+  },
+
+  completeReminder(reminderId) {
+    Store.toggleReminderDone(reminderId);
+    Toast.success('已完成');
+    App.navigateTo('reminders');
+  },
+
   // ========== 社区 ==========
   showNewPostModal() {
     const pets = Store.getState('pets');
@@ -404,10 +422,11 @@ const App = {
   
   // ========== 诊断历史 ==========
   showDiagnosisHistory() {
-    const container = document.getElementById('pagesContainer');
-    container.innerHTML = renderDiagnosisHistory();
+    Store.loadFromAPI().then(() => {
+      Pages.render('diagnosisHistory');
+    });
   },
-  
+
   // ========== 认证 ==========
   logout() {
     Store.logout();

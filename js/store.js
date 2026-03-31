@@ -257,6 +257,18 @@ const Store = {
     }
   },
 
+  async toggleReminderDone(id) {
+    try {
+      const r = this.state.reminders.find(x => x.id === id);
+      if (!r) return;
+      await API_BASE.updateReminder(id, { done: !r.done });
+      r.done = !r.done;
+      this.notify();
+    } catch (e) {
+      console.error('toggleReminderDone failed:', e);
+    }
+  },
+
   // ========== 社区操作 ==========
   async addPost(post) {
     try {
@@ -283,6 +295,16 @@ const Store = {
       }
     } catch (e) {
       console.error('toggleLike failed:', e);
+    }
+  },
+
+  async deletePost(postId) {
+    try {
+      await API_BASE.deletePost(postId);
+      this.state.posts = this.state.posts.filter(p => p.id !== postId);
+      this.notify();
+    } catch (e) {
+      console.error('deletePost failed:', e);
     }
   },
 
